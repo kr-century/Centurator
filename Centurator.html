@@ -1,0 +1,3186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centurator — By KR CENTURY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #080c12;
+      --surface:   #0d1521;
+      --surface2:  #111d2e;
+      --border:    rgba(0,210,200,0.13);
+      --accent:    #00d2c8;
+      --accent2:   #fbbf24;
+      --accent3:   #a78bfa;
+      --text:      #cde4f4;
+      --text-dim:  #4a7a9b;
+      --text-muted:#2a4a62;
+      --success:   #10b981;
+      --danger:    #f87171;
+      --glow:      0 0 20px rgba(0,210,200,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 50% -20%, rgba(0,210,200,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 90% 80%, rgba(167,139,250,0.04) 0%, transparent 70%);
+    }
+
+    /* GRID BG */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(0,210,200,0.025) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0,210,200,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .container {
+      position: relative; z-index: 1;
+      max-width: 1200px; margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      text-align: center;
+      padding: 2.5rem 0 2rem;
+      position: relative;
+    }
+    .header-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.25em;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .header-eyebrow::before, .header-eyebrow::after {
+      content: ''; width: 40px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent));
+    }
+    .header-eyebrow::after { transform: scaleX(-1); }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800; line-height: 1.1;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent3) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+    }
+    .header-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; color: var(--text-dim);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── TABS ── */
+    .tab-bar {
+      display: flex; flex-wrap: wrap; gap: 0.4rem;
+      justify-content: center;
+      margin: 2rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 0.5rem;
+    }
+    .tab-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      padding: 0.6rem 1.1rem;
+      border: 1px solid transparent;
+      border-radius: 0.6rem;
+      background: transparent; color: var(--text-dim);
+      cursor: pointer; transition: all 0.22s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--text); background: var(--surface2); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(0,210,200,0.18), rgba(0,210,200,0.06));
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: var(--glow);
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.4);
+      transition: border-color 0.3s;
+    }
+    .card:hover { border-color: rgba(0,210,200,0.22); }
+    .card-title {
+      font-size: 1.1rem; font-weight: 700; color: var(--accent);
+      display: flex; align-items: center; gap: 0.6rem;
+      margin-bottom: 1.5rem;
+      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em;
+    }
+    .card-title .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); box-shadow: var(--glow);
+    }
+
+    /* ── LABELS & INPUTS ── */
+    label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      margin-bottom: 0.4rem;
+    }
+    input[type="text"], input[type="number"], select, textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid rgba(0,210,200,0.15);
+      border-radius: 0.65rem;
+      padding: 0.65rem 0.9rem;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      appearance: none;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,210,200,0.12);
+    }
+    select option { background: #1a2a3a; }
+
+    .field { margin-bottom: 1rem; }
+    .field-row { display: grid; gap: 0.75rem; }
+    .cols-2 { grid-template-columns: 1fr 1fr; }
+    .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      border: none; border-radius: 0.75rem;
+      padding: 0.75rem 1.25rem;
+      cursor: pointer; transition: all 0.22s; white-space: nowrap;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #007a75);
+      color: #fff; box-shadow: 0 4px 16px rgba(0,210,200,0.2);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,210,200,0.35); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-ghost {
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text-dim);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-warn {
+      background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); color: var(--accent2);
+    }
+    .btn-warn:hover { background: rgba(251,191,36,0.2); }
+    .btn-purple {
+      background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.3); color: var(--accent3);
+    }
+    .btn-purple:hover { background: rgba(167,139,250,0.22); }
+    .btn-full { width: 100%; }
+    .btn-sm { padding: 0.5rem 0.9rem; font-size: 0.7rem; }
+    .btn-group { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+    /* ── RESULT BOX ── */
+    .result-box {
+      background: rgba(0,210,200,0.04);
+      border: 1px solid rgba(0,210,200,0.2);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .result-box::before {
+      content: ''; position: absolute;
+      top: -60px; left: 50%; transform: translateX(-50%);
+      width: 200px; height: 120px;
+      background: radial-gradient(ellipse, rgba(0,210,200,0.1), transparent);
+      pointer-events: none;
+    }
+    .result-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+    }
+    .result-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 600; color: #fff;
+      line-height: 1;
+    }
+    .result-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem; color: var(--accent);
+      margin-top: 0.6rem;
+    }
+    .result-yellow .result-value { color: var(--accent2); }
+    .result-yellow { border-color: rgba(251,191,36,0.25); background: rgba(251,191,36,0.04); }
+    .result-yellow::before { background: radial-gradient(ellipse, rgba(251,191,36,0.08), transparent); }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; font-weight: 600; letter-spacing: 0.05em;
+      padding: 0.2rem 0.5rem; border-radius: 0.4rem;
+      background: rgba(0,210,200,0.12); color: var(--accent);
+      border: 1px solid rgba(0,210,200,0.2);
+    }
+    .badge-warn { background: rgba(251,191,36,0.12); color: var(--accent2); border-color: rgba(251,191,36,0.2); }
+    .badge-danger { background: rgba(248,113,113,0.12); color: var(--danger); border-color: rgba(248,113,113,0.2); }
+
+    /* ── SAMPLE PILLS ── */
+    .sample-pills { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .sample-pill {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+      padding: 0.3rem 0.75rem; border-radius: 2rem;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text-dim); cursor: pointer; transition: all 0.2s;
+    }
+    .sample-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; border-radius: 0.75rem; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; }
+    thead th {
+      background: var(--bg); color: var(--text-dim);
+      padding: 0.7rem 0.9rem; text-align: center;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      font-weight: 600; font-size: 0.65rem;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody tr { transition: background 0.15s; }
+    tbody tr:hover { background: rgba(0,210,200,0.04); }
+    tbody td { padding: 0.55rem 0.9rem; text-align: center; color: var(--text); border-bottom: 1px solid rgba(0,210,200,0.05); }
+    tbody td.accent { color: var(--accent); font-weight: 600; }
+    tbody td.accent-yellow { color: var(--accent2); font-weight: 600; }
+
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--border); margin: 1.25rem 0; }
+
+    /* ── ALERT ── */
+    .alert { border-radius: 0.75rem; padding: 0.8rem 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; margin-bottom: 1rem; }
+    .alert-danger { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.25); color: var(--danger); }
+    .alert-info { background: rgba(0,210,200,0.06); border: 1px solid rgba(0,210,200,0.2); color: var(--accent); }
+
+    /* ── PANEL HIDE ── */
+    .tool-panel { display: none; animation: fadeIn 0.3s ease; }
+    .tool-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── TWO-COL LAYOUT ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; align-items: start; }
+    @media (max-width: 820px) { .two-col { grid-template-columns: 1fr; } .cols-3 { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 520px) { .cols-2, .cols-3 { grid-template-columns: 1fr; } }
+
+    /* ── MATRIX GRID ── */
+    .matrix-wrapper { overflow-x: auto; }
+    .matrix-grid { display: inline-grid; gap: 6px; padding: 1rem; background: var(--bg); border-radius: 0.75rem; border: 1px solid var(--border); }
+    .matrix-grid input { width: 60px; height: 46px; text-align: center; padding: 0.4rem; font-size: 0.8rem; }
+
+    /* ── VECTOR RESULT ── */
+    .vec-results { display: grid; gap: 0.75rem; margin-top: 1rem; }
+    .vec-result-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 0.65rem; padding: 0.7rem 1rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
+    }
+    .vec-result-item .label { color: var(--text-dim); font-size: 0.7rem; }
+    .vec-result-item .value { color: var(--accent); font-weight: 600; font-size: 1rem; }
+
+    /* ── PROGRESS / SKELETON ── */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 3rem 1rem; gap: 0.75rem; color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; text-align: center;
+    }
+    .empty-icon { font-size: 2.5rem; opacity: 0.4; }
+
+    /* ── INTEGRATION STEPS ── */
+    .int-formula-box {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 0.75rem;
+      padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      color: var(--text-dim); margin-top: 0.75rem;
+    }
+    .int-formula-box .highlight { color: var(--accent2); }
+
+    /* ── CROSS PRODUCT RESULT ── */
+    .vec-cross { font-family: 'JetBrains Mono', monospace; font-size: 1rem; color: var(--accent3); font-weight: 600; }
+
+    /* ── COPY BTN ── */
+    .copy-btn {
+      position: absolute; top: 0.75rem; right: 0.75rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      padding: 0.3rem 0.65rem; border-radius: 0.4rem;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text-dim); cursor: pointer; transition: all 0.2s;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center; padding: 2rem 0 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--text-muted);
+      letter-spacing: 0.1em; line-height: 2;
+    }
+    .footer span { color: var(--text-dim); }
+
+    /* ── MATRIX RESULT ── */
+    .matrix-result-panel {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 0.75rem;
+      padding: 1.25rem; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; overflow-x: auto; min-height: 80px;
+      position: relative;
+    }
+    .matrix-result-panel pre { color: var(--text); line-height: 1.8; }
+
+    /* ── HIDDEN ── */
+    .hidden { display: none !important; }
+
+    /* SVG chart */
+    .chart-svg { width: 100%; overflow: visible; }
+
+    /* ── GRAPH CANVAS ── */
+    .graph-canvas-wrap {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 0.75rem;
+      overflow: hidden; position: relative;
+    }
+    .graph-canvas-wrap canvas { display: block; width: 100%; }
+
+    /* ── SUB-MODE TABS ── */
+    .sub-tab-bar {
+      display: flex; gap: 0.3rem; flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 0.75rem; padding: 0.35rem;
+    }
+    .sub-tab-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.05em;
+      text-transform: uppercase; padding: 0.45rem 0.9rem;
+      border: 1px solid transparent; border-radius: 0.5rem;
+      background: transparent; color: var(--text-dim);
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .sub-tab-btn:hover { color: var(--text); background: var(--surface2); }
+    .sub-tab-btn.active { background: rgba(0,210,200,0.15); border-color: var(--accent); color: var(--accent); }
+    .sub-panel { display: none; }
+    .sub-panel.active { display: block; animation: fadeIn 0.25s ease; }
+
+    /* ── EQUATION MATRIX INPUT ── */
+    .eq-row { display: grid; gap: 0.4rem; align-items: center; margin-bottom: 0.75rem; font-family: 'JetBrains Mono', monospace; }
+    .eq-row-2v { grid-template-columns: 1fr 0.45fr 1fr 0.45fr 1fr 0.45fr; }
+    .eq-row-3v { grid-template-columns: 1fr 0.4fr 1fr 0.4fr 1fr 0.4fr 1fr 0.4fr; }
+    .eq-sign { color: var(--text-dim); font-size: 0.85rem; text-align: center; }
+    .eq-var  { color: var(--accent); font-size: 0.72rem; text-align: center; }
+
+    /* ── SOLUTION CHIP ── */
+    .sol-chip {
+      display: inline-flex; flex-direction: column; align-items: center;
+      background: var(--bg); border: 1px solid rgba(0,210,200,0.25); border-radius: 0.75rem;
+      padding: 0.9rem 1.4rem; font-family: 'JetBrains Mono', monospace; min-width: 110px;
+    }
+    .sol-chip .lbl { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+    .sol-chip .val { font-size: 1.2rem; color: var(--accent); font-weight: 600; }
+    .sol-chips { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1rem 0; }
+
+    /* ── POLY COEFF INPUTS ── */
+    .poly-inputs { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 1rem; }
+    .poly-inp-wrap { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+    .poly-inp-wrap label { font-size: 0.6rem; color: var(--accent2); margin: 0; text-transform: none; letter-spacing: 0; }
+    .poly-inp-wrap input { width: 70px; text-align: center; }
+    .poly-sign { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; color: var(--text-dim); padding-bottom: 0.5rem; align-self: flex-end; }
+
+    /* ── GEOMETRY ── */
+    .geo-shape-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 0.5rem; margin-bottom: 1.5rem; }
+    .geo-shape-btn {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.35rem; padding: 0.7rem 0.4rem; border-radius: 0.75rem;
+      background: var(--bg); border: 1px solid var(--border);
+      cursor: pointer; transition: all 0.22s;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+      color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .geo-shape-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .geo-shape-btn.active { border-color: var(--accent); background: rgba(0,210,200,0.1); color: var(--accent); }
+    .geo-icon { font-size: 1.5rem; line-height: 1; }
+    .geo-results { display: grid; gap: 0.6rem; }
+    .geo-result-row {
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 0.6rem;
+      padding: 0.65rem 1rem; font-family: 'JetBrains Mono', monospace;
+    }
+    .geo-result-row .k { font-size: 0.67rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+    .geo-result-row .v { font-size: 1rem; color: var(--accent2); font-weight: 600; }
+    .geo-svg-wrap {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 0.75rem;
+      padding: 1rem; display: flex; align-items: center; justify-content: center; min-height: 200px;
+    }
+
+    /* ── POLY ROOTS ── */
+    .root-chips { display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 1rem 0; }
+    .root-chip {
+      background: var(--bg); border: 1px solid rgba(167,139,250,0.3); border-radius: 0.65rem;
+      padding: 0.7rem 1.2rem; font-family: 'JetBrains Mono', monospace;
+      display: flex; flex-direction: column; gap: 0.2rem;
+    }
+    .root-chip .rk { font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.1em; }
+    .root-chip .rv { font-size: 0.95rem; color: var(--accent3); font-weight: 600; }
+
+    /* ── DARK/LIGHT MODE TOGGLE ── */
+    .theme-toggle {
+      position: fixed; top: 1rem; right: 1rem; z-index: 999;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 2rem; padding: 0.4rem 0.9rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      color: var(--text-dim); cursor: pointer; transition: all 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── BACK TO TOP ── */
+    .back-top {
+      position: fixed; bottom: 2rem; right: 1.5rem; z-index: 999;
+      background: var(--accent); color: #000; border: none;
+      border-radius: 50%; width: 44px; height: 44px;
+      font-size: 1.2rem; cursor: pointer; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      box-shadow: 0 4px 16px rgba(0,210,200,0.4);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .back-top.visible { opacity: 1; pointer-events: all; }
+    .back-top:hover { transform: translateY(-3px); }
+
+    /* ── PULSE ON ACTIVE TAB ── */
+    .tab-btn.active { animation: tabPulse 2.5s ease-in-out infinite; }
+    @keyframes tabPulse {
+      0%, 100% { box-shadow: 0 0 12px rgba(0,210,200,0.2); }
+      50% { box-shadow: 0 0 22px rgba(0,210,200,0.45); }
+    }
+
+    /* ── SHIMMER LOADING ── */
+    .shimmer {
+      background: linear-gradient(90deg, var(--surface) 25%, rgba(0,210,200,0.08) 50%, var(--surface) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ── FORMULA REFERENCE ── */
+    .formula-ref {
+      margin-top: 1rem; border: 1px solid rgba(0,210,200,0.12);
+      border-radius: 0.75rem; overflow: hidden;
+    }
+    .formula-ref summary {
+      padding: 0.65rem 1rem; background: var(--bg);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.68rem;
+      color: var(--text-dim); cursor: pointer; text-transform: uppercase;
+      letter-spacing: 0.08em; list-style: none;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .formula-ref summary:hover { color: var(--accent); }
+    .formula-ref summary::before { content: '▶'; font-size: 0.5rem; transition: transform 0.2s; }
+    details[open] .formula-ref summary::before { transform: rotate(90deg); }
+    .formula-ref-body {
+      padding: 0.9rem 1rem; background: rgba(0,210,200,0.03);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      color: var(--text-dim); line-height: 1.9;
+    }
+    .formula-ref-body .f-line { color: var(--accent2); }
+
+    /* ── MOBILE RESPONSIVE (320px–768px) FIXES ── */
+    @media (max-width: 768px) {
+      .container { padding: 1rem 0.75rem 3rem; }
+      h1 { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+      .tab-bar { gap: 0.3rem; padding: 0.35rem; }
+      .tab-btn { font-size: 0.62rem; padding: 0.5rem 0.7rem; }
+      .card { padding: 1.25rem; }
+      input[type="text"], input[type="number"], select {
+        min-height: 44px; font-size: 0.9rem;
+      }
+      .btn { min-height: 44px; }
+      .result-value { font-size: clamp(1.2rem, 6vw, 2rem); }
+      .geo-shape-grid { grid-template-columns: repeat(3, 1fr); }
+      .eq-row-2v { grid-template-columns: 1fr 0.4fr 1fr 0.4fr 1fr 0.4fr; gap: 0.25rem; }
+      .eq-row-3v { grid-template-columns: 1fr 0.3fr 1fr 0.3fr 1fr 0.3fr 1fr 0.3fr; gap: 0.2rem; font-size: 0.7rem; }
+      .sol-chip { min-width: 80px; padding: 0.65rem 0.9rem; }
+      .sub-tab-bar { gap: 0.2rem; padding: 0.25rem; }
+      .sub-tab-btn { font-size: 0.6rem; padding: 0.35rem 0.6rem; }
+    }
+    @media (max-width: 480px) {
+      .tab-btn { font-size: 0.58rem; padding: 0.45rem 0.55rem; }
+      .eq-row-3v { grid-template-columns: 1fr 0.25fr 1fr 0.25fr 1fr 0.25fr 1fr 0.25fr; }
+      .cols-3 { grid-template-columns: 1fr 1fr; }
+      .field-row.cols-3 { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── LIGHT MODE ── */
+    body.light-mode {
+      --bg: #f0f6ff; --surface: #ffffff; --surface2: #e8f0fb;
+      --border: rgba(0,150,145,0.18); --text: #1a2a3a;
+      --text-dim: #3a6080; --text-muted: #8aaabb;
+    }
+    body.light-mode h1 { background: linear-gradient(135deg, #1a3a5a 0%, #008a85 60%, #6040c0 100%); -webkit-background-clip: text; background-clip: text; }
+
+    /* ── GRAPH ZOOM CONTROLS ── */
+    .graph-controls {
+      display: flex; gap: 0.4rem; align-items: center;
+      padding: 0.4rem 0.75rem; background: var(--bg);
+      border-top: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+    }
+    .graph-controls button {
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text-dim); border-radius: 0.35rem;
+      padding: 0.25rem 0.6rem; cursor: pointer; font-size: 0.7rem;
+      transition: all 0.15s; font-family: 'JetBrains Mono', monospace;
+    }
+    .graph-controls button:hover { border-color: var(--accent); color: var(--accent); }
+    .graph-tooltip {
+      position: absolute; background: var(--surface);
+      border: 1px solid var(--accent); border-radius: 0.4rem;
+      padding: 0.3rem 0.6rem; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--accent); pointer-events: none;
+      white-space: nowrap; z-index: 10; display: none;
+    }
+    .graph-canvas-wrap { position: relative; }
+
+    /* ── NEW MODULE TABS ── */
+    .new-tab-badge {
+      display: inline-block; background: var(--accent2);
+      color: #000; font-size: 0.45rem; padding: 0.1rem 0.3rem;
+      border-radius: 0.25rem; font-weight: 700; margin-left: 0.3rem;
+      vertical-align: middle; letter-spacing: 0;
+    }
+    /* Stats canvas */
+    .stats-canvas-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 0.75rem; overflow:hidden; }
+
+    /* Trig unit circle */
+    .trig-circle-wrap { background: var(--bg); border: 1px solid var(--border); border-radius: 0.75rem; padding: 0.5rem; display:flex; align-items:center; justify-content:center; }
+
+    /* AP/GP row */
+    .prog-result-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.6rem; margin-top: 1rem; }
+    .prog-result-item { background: var(--bg); border: 1px solid var(--border); border-radius: 0.6rem; padding: 0.7rem; font-family: 'JetBrains Mono', monospace; }
+    .prog-result-item .pk { font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem; }
+    .prog-result-item .pv { font-size: 1rem; color: var(--accent); font-weight: 600; }
+
+    /* Coord geo */
+    .cg-result-grid { display: grid; gap: 0.55rem; margin-top: 1rem; }
+    .cg-result-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 0.6rem; padding: 0.6rem 1rem; font-family: 'JetBrains Mono', monospace; }
+    .cg-result-row .ck { font-size: 0.65rem; color: var(--text-dim); }
+    .cg-result-row .cv { font-size: 0.9rem; color: var(--accent2); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle Light/Dark Mode">◐ Theme</button>
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to Top">↑</button>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-eyebrow">KR CENTURY · Class 11 &amp; 12 Mathematics</div>
+    <h1>CENTURATOR</h1>
+    <p class="header-sub" style="font-size:0.7rem;color:var(--accent);letter-spacing:0.2em;margin-bottom:0.4rem">BY KR CENTURY</p>
+    <p class="header-sub">Class 11 &amp; 12 Mathematics &nbsp;|&nbsp; Root Finding · Matrix · Integration · Differentiation · Vectors · Equations · Geometry</p>
+  </header>
+
+  <!-- TABS -->
+  <div class="tab-bar" role="tablist">
+    <button class="tab-btn active" onclick="switchTool(0)" id="tab-0">⊕ Root Finding</button>
+    <button class="tab-btn" onclick="switchTool(1)" id="tab-1">⊞ Matrix</button>
+    <button class="tab-btn" onclick="switchTool(2)" id="tab-2">∫ Integration</button>
+    <button class="tab-btn" onclick="switchTool(3)" id="tab-3">∂ Differentiation</button>
+    <button class="tab-btn" onclick="switchTool(4)" id="tab-4">↗ Vectors</button>
+    <button class="tab-btn" onclick="switchTool(5)" id="tab-5">⚖ Equations</button>
+    <button class="tab-btn" onclick="switchTool(6)" id="tab-6">⬡ Geometry</button>
+    <button class="tab-btn" onclick="switchTool(7)" id="tab-7">⟨sin⟩ Trig<span class="new-tab-badge">NEW</span></button>
+    <button class="tab-btn" onclick="switchTool(8)" id="tab-8">Σ Stats<span class="new-tab-badge">NEW</span></button>
+    <button class="tab-btn" onclick="switchTool(9)" id="tab-9">⊙ Coord Geo<span class="new-tab-badge">NEW</span></button>
+    <button class="tab-btn" onclick="switchTool(10)" id="tab-10">∑ AP/GP<span class="new-tab-badge">NEW</span></button>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!--           ROOT FINDING PANEL          -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tool-root" class="tool-panel active">
+    <div class="two-col">
+
+      <!-- Inputs -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Configuration</div>
+
+        <div class="field">
+          <label>Numerical Method</label>
+          <select id="method" onchange="onMethodChange()">
+            <option value="bisection">Bisection Method</option>
+            <option value="falsi">Regula-Falsi (False Position)</option>
+            <option value="secant">Secant Method</option>
+            <option value="newton">Newton-Raphson Method</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Function f(x)</label>
+          <input id="fx" type="text" value="x**3 - 2*x - 5" placeholder="e.g. x**3 - 2*x - 5">
+        </div>
+
+        <div id="df_div" class="field hidden">
+          <label>Derivative f′(x)</label>
+          <input id="dfx" type="text" value="3*x**2 - 2" placeholder="e.g. 3*x**2 - 2">
+        </div>
+
+        <div class="field field-row cols-2">
+          <div>
+            <label id="a_label">Lower Bound a</label>
+            <input id="a" type="number" value="2" step="any">
+          </div>
+          <div id="b_div">
+            <label id="b_label">Upper Bound b</label>
+            <input id="b" type="number" value="3" step="any">
+          </div>
+        </div>
+
+        <div class="field field-row cols-2">
+          <div>
+            <label>Tolerance ε</label>
+            <input id="tol" type="number" value="0.0001" step="any">
+          </div>
+          <div>
+            <label>Max Iterations</label>
+            <input id="maxiter" type="number" value="30">
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="field">
+          <label>Quick Samples</label>
+          <div class="sample-pills">
+            <span class="sample-pill" onclick="loadSample(1)">x³−2x−5</span>
+            <span class="sample-pill" onclick="loadSample(2)">x²−3 = 0</span>
+            <span class="sample-pill" onclick="loadSample(3)">cos(x)−x</span>
+            <span class="sample-pill" onclick="loadSample(4)">eˣ−3x</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="btn-group">
+          <button class="btn btn-primary" style="flex:1" onclick="solveRoot()">▶ Find Root</button>
+          <button class="btn btn-ghost btn-sm" onclick="clearRoot()">↺ Reset</button>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Results</div>
+        <div id="root-error" class="alert alert-danger hidden"></div>
+
+        <div id="root-final" class="hidden">
+          <div class="result-box" style="margin-bottom:1.25rem; position:relative">
+            <button class="copy-btn" onclick="copyText('root-value-text')">copy</button>
+            <div class="result-label">Approximate Root</div>
+            <div class="result-value" id="root-value-text">—</div>
+            <div class="result-sub" id="root-iters"></div>
+          </div>
+
+          <div class="field-row cols-3" style="margin-bottom:1.25rem; gap:0.5rem">
+            <div class="result-box" style="padding:0.9rem">
+              <div class="result-label" style="font-size:0.58rem">f(root)</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:1rem; color:var(--accent2)" id="root-fval">—</div>
+            </div>
+            <div class="result-box" style="padding:0.9rem">
+              <div class="result-label" style="font-size:0.58rem">Iterations</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:1rem; color:var(--accent3)" id="root-iter-count">—</div>
+            </div>
+            <div class="result-box" style="padding:0.9rem">
+              <div class="result-label" style="font-size:0.58rem">Method</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--text)" id="root-method-label">—</div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table id="root-table">
+              <thead><tr id="root-thead"></tr></thead>
+              <tbody id="root-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="root-empty" class="empty-state">
+          <div class="empty-icon">∅</div>
+          <div>Configure parameters and click <strong>Find Root</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!--           MATRIX PANEL                -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tool-matrix" class="tool-panel">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Matrix Calculator</div>
+
+      <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.25rem">
+        <div style="display:flex; align-items:center; gap:0.5rem">
+          <label style="margin:0; white-space:nowrap">Matrix Size n×n</label>
+          <input id="matrix-size" type="number" min="1" max="6" value="3" style="width:70px">
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="createMatrixInput()">Create</button>
+        <button class="btn btn-ghost btn-sm" onclick="fillMatrixRandom()">Random Fill</button>
+        <button class="btn btn-ghost btn-sm" onclick="fillMatrixIdentity()">Identity</button>
+        <button class="btn btn-ghost btn-sm" onclick="clearMatrix()">Clear</button>
+      </div>
+
+      <div class="matrix-wrapper">
+        <div id="matrix-container" class="matrix-grid" style="grid-template-columns: repeat(3,1fr)"></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="btn-group" style="margin-bottom:0.75rem">
+        <button class="btn btn-primary btn-sm" onclick="matOp('det')">Determinant |A|</button>
+        <button class="btn btn-primary btn-sm" onclick="matOp('trace')">Trace tr(A)</button>
+        <button class="btn btn-primary btn-sm" onclick="matOp('transpose')">Transpose Aᵀ</button>
+        <button class="btn btn-primary btn-sm" onclick="matOp('square')">A²</button>
+        <button class="btn btn-primary btn-sm" onclick="matOp('cube')">A³</button>
+        <button class="btn btn-warn btn-sm" onclick="matOp('inverse')">A⁻¹ Inverse</button>
+        <button class="btn btn-purple btn-sm" onclick="matOp('power')">Aⁿ Power</button>
+      </div>
+
+      <div id="power-row" class="field hidden" style="max-width:200px">
+        <label>Enter Power n</label>
+        <input id="custom-power" type="number" min="1" value="4">
+      </div>
+
+      <div id="mat-error" class="alert alert-danger hidden" style="margin-top:0.75rem"></div>
+      <div id="matrix-result" class="matrix-result-panel" style="margin-top:0.75rem; min-height:100px">
+        <div class="empty-state"><div class="empty-icon">⊞</div><div>Select an operation above</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!--         INTEGRATION PANEL             -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tool-integration" class="tool-panel">
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Numerical Integration</div>
+
+        <div class="field">
+          <label>Method</label>
+          <select id="int-method">
+            <option value="trapezoidal">Trapezoidal Rule</option>
+            <option value="simpson13">Simpson's 1/3 Rule</option>
+            <option value="simpson38">Simpson's 3/8 Rule</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>f(x)</label>
+          <input id="int-fx" type="text" value="x**2" placeholder="e.g. x**2">
+        </div>
+        <div class="field field-row cols-3">
+          <div><label>Lower a</label><input id="int-a" type="number" value="0" step="any"></div>
+          <div><label>Upper b</label><input id="int-b" type="number" value="2" step="any"></div>
+          <div><label>Intervals n</label><input id="int-n" type="number" value="4" min="2"></div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="sample-pills" style="margin-bottom:1rem">
+          <span class="sample-pill" onclick="intSample(1)">x²</span>
+          <span class="sample-pill" onclick="intSample(2)">sin(x)</span>
+          <span class="sample-pill" onclick="intSample(3)">eˣ</span>
+          <span class="sample-pill" onclick="intSample(4)">1/(1+x²)</span>
+        </div>
+        <div id="int-error" class="alert alert-danger hidden"></div>
+        <button class="btn btn-primary btn-full" onclick="calcIntegration()">∫ Calculate Area</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Result</div>
+        <div id="int-empty" class="empty-state"><div class="empty-icon">∫</div><div>Enter parameters and calculate</div></div>
+        <div id="int-result-area" class="hidden">
+          <div class="result-box result-yellow" style="position:relative; margin-bottom:1.25rem">
+            <button class="copy-btn" onclick="copyText('int-area-val')">copy</button>
+            <div class="result-label">Approximate Area ∫f(x)dx</div>
+            <div class="result-value" id="int-area-val">—</div>
+            <div class="result-sub" id="int-sub"></div>
+          </div>
+
+          <div id="int-formula-box" class="int-formula-box hidden"></div>
+
+          <div style="margin-top:1rem">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.5rem">Intermediate Values</div>
+            <div class="table-wrap">
+              <table id="int-table">
+                <thead><tr><th>i</th><th>xᵢ</th><th>f(xᵢ)</th><th>Weight</th><th>Contribution</th></tr></thead>
+                <tbody id="int-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!--       DIFFERENTIATION PANEL           -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tool-diff" class="tool-panel">
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Numerical Differentiation</div>
+
+        <div class="field">
+          <label>f(x)</label>
+          <input id="diff-fx" type="text" value="x**3" placeholder="e.g. x**3">
+        </div>
+        <div class="field field-row cols-3">
+          <div><label>Point x</label><input id="diff-x" type="number" value="2" step="any"></div>
+          <div><label>Step h</label><input id="diff-h" type="number" value="0.001" step="any"></div>
+          <div>
+            <label>Method</label>
+            <select id="diff-method">
+              <option value="central">Central</option>
+              <option value="forward">Forward</option>
+              <option value="backward">Backward</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="sample-pills" style="margin-bottom:1rem">
+          <span class="sample-pill" onclick="diffSample(1)">x³ at x=2</span>
+          <span class="sample-pill" onclick="diffSample(2)">sin(x) at π/4</span>
+          <span class="sample-pill" onclick="diffSample(3)">eˣ at x=1</span>
+        </div>
+        <div id="diff-error" class="alert alert-danger hidden"></div>
+        <button class="btn btn-primary btn-full" onclick="calcDiff()">∂ Compute Derivative</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Derivative Result</div>
+        <div id="diff-empty" class="empty-state"><div class="empty-icon">∂</div><div>Enter a function and compute</div></div>
+        <div id="diff-result-area" class="hidden">
+          <div class="result-box" style="position:relative; margin-bottom:1.25rem">
+            <button class="copy-btn" onclick="copyText('diff-val')">copy</button>
+            <div class="result-label">f′(x) ≈</div>
+            <div class="result-value" id="diff-val">—</div>
+            <div class="result-sub" id="diff-sub"></div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; margin-bottom:1rem">
+            <div class="result-box" style="padding:0.9rem">
+              <div class="result-label" style="font-size:0.58rem">f(x−h)</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:0.9rem; color:var(--text)" id="diff-fxmh">—</div>
+            </div>
+            <div class="result-box" style="padding:0.9rem">
+              <div class="result-label" style="font-size:0.58rem">f(x)</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:0.9rem; color:var(--text)" id="diff-fx-val">—</div>
+            </div>
+            <div class="result-box" style="padding:0.9rem">
+              <div class="result-label" style="font-size:0.58rem">f(x+h)</div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:0.9rem; color:var(--text)" id="diff-fxph">—</div>
+            </div>
+          </div>
+
+          <div id="diff-formula-box" class="int-formula-box"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!--           VECTOR PANEL                -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tool-vector" class="tool-panel">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Vector Operations</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem 2rem; align-items:start">
+
+        <!-- Vector A -->
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent); margin-bottom:0.75rem">
+            Vector <strong>A</strong> = (Ax î + Ay ĵ + Az k̂)
+          </div>
+          <div class="field-row cols-3">
+            <div><label>Ax</label><input id="vec-ax" type="number" value="3" step="any"></div>
+            <div><label>Ay</label><input id="vec-ay" type="number" value="4" step="any"></div>
+            <div><label>Az</label><input id="vec-az" type="number" value="0" step="any"></div>
+          </div>
+        </div>
+
+        <!-- Vector B -->
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent3); margin-bottom:0.75rem">
+            Vector <strong>B</strong> = (Bx î + By ĵ + Bz k̂)
+          </div>
+          <div class="field-row cols-3">
+            <div><label>Bx</label><input id="vec-bx" type="number" value="1" step="any"></div>
+            <div><label>By</label><input id="vec-by" type="number" value="2" step="any"></div>
+            <div><label>Bz</label><input id="vec-bz" type="number" value="5" step="any"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="btn-group" style="margin-bottom:1rem">
+        <button class="btn btn-primary btn-sm" onclick="vecOp('magnitude')">|A| Magnitude</button>
+        <button class="btn btn-ghost btn-sm" onclick="vecOp('magnitudeB')">|B| Magnitude</button>
+        <button class="btn btn-ghost btn-sm" onclick="vecOp('dot')">A·B Dot Product</button>
+        <button class="btn btn-warn btn-sm" onclick="vecOp('cross')">A×B Cross Product</button>
+        <button class="btn btn-purple btn-sm" onclick="vecOp('angle')">∠ Angle</button>
+        <button class="btn btn-ghost btn-sm" onclick="vecOp('unit')">Â Unit Vector</button>
+        <button class="btn btn-primary btn-sm" onclick="vecOp('all')">All Operations</button>
+      </div>
+
+      <div id="vec-error" class="alert alert-danger hidden"></div>
+      <div id="vec-results" class="vec-results">
+        <div class="empty-state"><div class="empty-icon">↗</div><div>Select an operation to compute</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!--       EQUATION SOLVER PANEL          -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tool-equations" class="tool-panel">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Equation Solver — Class 11 &amp; 12</div>
+
+      <div class="sub-tab-bar">
+        <button class="sub-tab-btn active" onclick="eqSwitchMode(0)" id="eq-tab-0">2-Variable Linear</button>
+        <button class="sub-tab-btn" onclick="eqSwitchMode(1)" id="eq-tab-1">3-Variable Linear</button>
+        <button class="sub-tab-btn" onclick="eqSwitchMode(2)" id="eq-tab-2">Quadratic (ax²+bx+c)</button>
+        <button class="sub-tab-btn" onclick="eqSwitchMode(3)" id="eq-tab-3">Cubic (ax³+…)</button>
+        <button class="sub-tab-btn" onclick="eqSwitchMode(4)" id="eq-tab-4">Any Power / nth Degree</button>
+      </div>
+
+      <!-- ── 2-Variable ── -->
+      <div id="eq-panel-0" class="sub-panel active">
+        <div class="two-col">
+          <div>
+            <p style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--text-dim); margin-bottom:1rem">
+              Enter coefficients for:<br>a₁x + b₁y = c₁<br>a₂x + b₂y = c₂
+            </p>
+            <!-- Eq 1 -->
+            <div class="eq-row eq-row-2v">
+              <input id="e2-a1" type="number" value="2" step="any"><span class="eq-var">x +</span>
+              <input id="e2-b1" type="number" value="3" step="any"><span class="eq-var">y =</span>
+              <input id="e2-c1" type="number" value="8" step="any">
+            </div>
+            <!-- Eq 2 -->
+            <div class="eq-row eq-row-2v">
+              <input id="e2-a2" type="number" value="1" step="any"><span class="eq-var">x +</span>
+              <input id="e2-b2" type="number" value="-1" step="any"><span class="eq-var">y =</span>
+              <input id="e2-c2" type="number" value="1" step="any">
+            </div>
+            <div class="divider"></div>
+            <div class="sample-pills" style="margin-bottom:1rem">
+              <span class="sample-pill" onclick="eq2Sample(1)">2x+3y=8, x−y=1</span>
+              <span class="sample-pill" onclick="eq2Sample(2)">3x+2y=12, x+4y=10</span>
+              <span class="sample-pill" onclick="eq2Sample(3)">5x−y=7, 2x+3y=1</span>
+            </div>
+            <div id="eq2-error" class="alert alert-danger hidden"></div>
+            <button class="btn btn-primary btn-full" onclick="solveEq2()">⚖ Solve System</button>
+          </div>
+          <div>
+            <div id="eq2-empty" class="empty-state"><div class="empty-icon">⚖</div><div>Enter coefficients and solve</div></div>
+            <div id="eq2-result" class="hidden">
+              <div class="sol-chips" id="eq2-chips"></div>
+              <div id="eq2-check" class="int-formula-box" style="margin-bottom:1rem"></div>
+              <!-- Graph -->
+              <div style="font-family:'JetBrains Mono',monospace; font-size:0.65rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.5rem">Graphical Solution</div>
+              <div class="graph-canvas-wrap">
+                <canvas id="eq2-canvas" height="280"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 3-Variable ── -->
+      <div id="eq-panel-1" class="sub-panel">
+        <div class="two-col">
+          <div>
+            <p style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--text-dim); margin-bottom:1rem">
+              Enter coefficients for:<br>a₁x + b₁y + c₁z = d₁<br>a₂x + b₂y + c₂z = d₂<br>a₃x + b₃y + c₃z = d₃
+            </p>
+            <div id="eq3-rows"></div>
+            <div class="divider"></div>
+            <div class="sample-pills" style="margin-bottom:1rem">
+              <span class="sample-pill" onclick="eq3Sample(1)">Sample A</span>
+              <span class="sample-pill" onclick="eq3Sample(2)">Sample B</span>
+            </div>
+            <div id="eq3-error" class="alert alert-danger hidden"></div>
+            <button class="btn btn-primary btn-full" onclick="solveEq3()">⚖ Solve 3-Variable System</button>
+          </div>
+          <div>
+            <div id="eq3-empty" class="empty-state"><div class="empty-icon">⚖</div><div>Enter the 3 equations and solve</div></div>
+            <div id="eq3-result" class="hidden">
+              <div class="sol-chips" id="eq3-chips"></div>
+              <div id="eq3-check" class="int-formula-box" style="margin-bottom:1rem"></div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--text-dim); margin-top:0.75rem">
+                Solved using <span style="color:var(--accent)">Gaussian Elimination</span> — unique solution (det ≠ 0) or least-squares approximation.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Quadratic ── -->
+      <div id="eq-panel-2" class="sub-panel">
+        <div class="two-col">
+          <div>
+            <p style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--text-dim); margin-bottom:1rem">ax² + bx + c = 0</p>
+            <div class="poly-inputs">
+              <div class="poly-inp-wrap"><label>a (x²)</label><input id="q-a" type="number" value="1" step="any"></div>
+              <span class="poly-sign">x² +</span>
+              <div class="poly-inp-wrap"><label>b (x)</label><input id="q-b" type="number" value="-3" step="any"></div>
+              <span class="poly-sign">x +</span>
+              <div class="poly-inp-wrap"><label>c</label><input id="q-c" type="number" value="2" step="any"></div>
+              <span class="poly-sign">= 0</span>
+            </div>
+            <div class="sample-pills" style="margin-bottom:1rem">
+              <span class="sample-pill" onclick="qSample(1)">x²−3x+2</span>
+              <span class="sample-pill" onclick="qSample(2)">2x²+5x−3</span>
+              <span class="sample-pill" onclick="qSample(3)">x²+x+1 (complex)</span>
+              <span class="sample-pill" onclick="qSample(4)">x²−4</span>
+            </div>
+            <div id="quad-error" class="alert alert-danger hidden"></div>
+            <button class="btn btn-primary btn-full" onclick="solveQuad()">▶ Solve Quadratic</button>
+          </div>
+          <div>
+            <div id="quad-empty" class="empty-state"><div class="empty-icon">x²</div><div>Enter coefficients and solve</div></div>
+            <div id="quad-result" class="hidden">
+              <div class="root-chips" id="quad-chips"></div>
+              <div id="quad-disc" class="int-formula-box" style="margin-bottom:1rem"></div>
+              <div class="graph-canvas-wrap" style="margin-top:0.75rem">
+                <canvas id="quad-canvas" height="260"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Cubic ── -->
+      <div id="eq-panel-3" class="sub-panel">
+        <div class="two-col">
+          <div>
+            <p style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:var(--text-dim); margin-bottom:1rem">ax³ + bx² + cx + d = 0</p>
+            <div class="poly-inputs">
+              <div class="poly-inp-wrap"><label>a (x³)</label><input id="cu-a" type="number" value="1" step="any"></div>
+              <span class="poly-sign">x³ +</span>
+              <div class="poly-inp-wrap"><label>b (x²)</label><input id="cu-b" type="number" value="-6" step="any"></div>
+              <span class="poly-sign">x² +</span>
+              <div class="poly-inp-wrap"><label>c (x)</label><input id="cu-c" type="number" value="11" step="any"></div>
+              <span class="poly-sign">x +</span>
+              <div class="poly-inp-wrap"><label>d</label><input id="cu-d" type="number" value="-6" step="any"></div>
+              <span class="poly-sign">= 0</span>
+            </div>
+            <div class="sample-pills" style="margin-bottom:1rem">
+              <span class="sample-pill" onclick="cuSample(1)">x³−6x²+11x−6</span>
+              <span class="sample-pill" onclick="cuSample(2)">x³−3x+2</span>
+              <span class="sample-pill" onclick="cuSample(3)">x³+x²−x−1</span>
+            </div>
+            <div id="cubic-error" class="alert alert-danger hidden"></div>
+            <button class="btn btn-primary btn-full" onclick="solveCubic()">▶ Solve Cubic</button>
+          </div>
+          <div>
+            <div id="cubic-empty" class="empty-state"><div class="empty-icon">x³</div><div>Enter coefficients and solve</div></div>
+            <div id="cubic-result" class="hidden">
+              <div class="root-chips" id="cubic-chips"></div>
+              <div id="cubic-info" class="int-formula-box" style="margin-bottom:1rem"></div>
+              <div class="graph-canvas-wrap" style="margin-top:0.75rem">
+                <canvas id="cubic-canvas" height="260"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── nth Degree ── -->
+      <div id="eq-panel-4" class="sub-panel">
+        <div class="two-col">
+          <div>
+            <div class="field" style="max-width:200px; margin-bottom:1rem">
+              <label>Degree of Polynomial (n)</label>
+              <input id="nth-degree" type="number" value="4" min="1" max="10" onchange="buildNthInputs()">
+            </div>
+            <div id="nth-inputs" class="poly-inputs" style="flex-direction:column; align-items:flex-start; gap:0.5rem"></div>
+            <div id="nth-error" class="alert alert-danger hidden"></div>
+            <button class="btn btn-primary btn-full" style="margin-top:0.75rem" onclick="solveNth()">▶ Solve Polynomial</button>
+          </div>
+          <div>
+            <div id="nth-empty" class="empty-state"><div class="empty-icon">xⁿ</div><div>Set degree and solve</div></div>
+            <div id="nth-result" class="hidden">
+              <div class="root-chips" id="nth-chips"></div>
+              <div class="graph-canvas-wrap" style="margin-top:0.75rem">
+                <canvas id="nth-canvas" height="260"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!--       GEOMETRY PANEL                  -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tool-geometry" class="tool-panel">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Geometry Calculator — Class 11 &amp; 12</div>
+
+      <div class="geo-shape-grid" id="geo-shape-grid">
+        <div class="geo-shape-btn active" onclick="geoSelect('circle')"><div class="geo-icon">◯</div>Circle</div>
+        <div class="geo-shape-btn" onclick="geoSelect('square')"><div class="geo-icon">▢</div>Square</div>
+        <div class="geo-shape-btn" onclick="geoSelect('rectangle')"><div class="geo-icon">▭</div>Rectangle</div>
+        <div class="geo-shape-btn" onclick="geoSelect('triangle')"><div class="geo-icon">△</div>Triangle</div>
+        <div class="geo-shape-btn" onclick="geoSelect('sphere')"><div class="geo-icon">🌐</div>Sphere</div>
+        <div class="geo-shape-btn" onclick="geoSelect('cylinder')"><div class="geo-icon">⬡</div>Cylinder</div>
+        <div class="geo-shape-btn" onclick="geoSelect('cube')"><div class="geo-icon">⬛</div>Cube</div>
+        <div class="geo-shape-btn" onclick="geoSelect('cuboid')"><div class="geo-icon">📦</div>Cuboid</div>
+        <div class="geo-shape-btn" onclick="geoSelect('cone')"><div class="geo-icon">🔺</div>Cone</div>
+        <div class="geo-shape-btn" onclick="geoSelect('rhombus')"><div class="geo-icon">◇</div>Rhombus</div>
+        <div class="geo-shape-btn" onclick="geoSelect('trapezoid')"><div class="geo-icon">⏢</div>Trapezoid</div>
+        <div class="geo-shape-btn" onclick="geoSelect('ellipse')"><div class="geo-icon">⬯</div>Ellipse</div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div id="geo-inputs"></div>
+          <div id="geo-error" class="alert alert-danger hidden"></div>
+          <button class="btn btn-primary btn-full" style="margin-top:1rem" onclick="calcGeo()">⬡ Calculate</button>
+        </div>
+        <div>
+          <div class="geo-svg-wrap" id="geo-svg-wrap" style="margin-bottom:1rem">
+            <div class="empty-state"><div class="empty-icon">◯</div><div>Select a shape above</div></div>
+          </div>
+          <div class="geo-results" id="geo-results"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════ -->
+  <!--        TRIGONOMETRY PANEL             -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tool-trig" class="tool-panel">
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Trigonometry Calculator</div>
+        <div class="sub-tab-bar">
+          <button class="sub-tab-btn active" onclick="trigSwitchMode(0)" id="trig-tab-0">Basic Trig</button>
+          <button class="sub-tab-btn" onclick="trigSwitchMode(1)" id="trig-tab-1">Inverse Trig</button>
+          <button class="sub-tab-btn" onclick="trigSwitchMode(2)" id="trig-tab-2">Compound Angles</button>
+        </div>
+
+        <!-- Basic Trig -->
+        <div id="trig-panel-0" class="sub-panel active">
+          <div class="field field-row cols-2">
+            <div>
+              <label>Angle</label>
+              <input id="trig-angle" type="number" value="45" step="any">
+            </div>
+            <div>
+              <label>Unit</label>
+              <select id="trig-unit">
+                <option value="deg">Degrees °</option>
+                <option value="rad">Radians</option>
+              </select>
+            </div>
+          </div>
+          <div id="trig-error" class="alert alert-danger hidden"></div>
+          <button class="btn btn-primary btn-full" onclick="calcTrig()">Calculate All Functions</button>
+        </div>
+
+        <!-- Inverse Trig -->
+        <div id="trig-panel-1" class="sub-panel">
+          <div class="field">
+            <label>Value (between -1 and 1 for sin/cos)</label>
+            <input id="inv-val" type="number" value="0.5" step="any">
+          </div>
+          <div id="inv-error" class="alert alert-danger hidden"></div>
+          <button class="btn btn-primary btn-full" onclick="calcInvTrig()">Calculate Inverse Trig</button>
+        </div>
+
+        <!-- Compound Angles -->
+        <div id="trig-panel-2" class="sub-panel">
+          <div class="field field-row cols-2">
+            <div><label>Angle A (°)</label><input id="cpd-a" type="number" value="30" step="any"></div>
+            <div><label>Angle B (°)</label><input id="cpd-b" type="number" value="45" step="any"></div>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="calcCompound()">Show Compound Formulas</button>
+        </div>
+
+        <details style="margin-top:1rem">
+          <div class="formula-ref">
+            <summary>Formula Reference</summary>
+            <div class="formula-ref-body">
+              <span class="f-line">sin²θ + cos²θ = 1</span><br>
+              tan θ = sin θ / cos θ<br>
+              sec θ = 1/cos θ, cosec θ = 1/sin θ, cot θ = 1/tan θ<br>
+              <span class="f-line">sin(A±B) = sinA·cosB ± cosA·sinB</span><br>
+              cos(A±B) = cosA·cosB ∓ sinA·sinB
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Results & Unit Circle</div>
+        <div id="trig-results-area">
+          <div class="empty-state"><div class="empty-icon">⟨sin⟩</div><div>Enter an angle and calculate</div></div>
+        </div>
+        <div class="trig-circle-wrap" style="margin-top:1rem">
+          <canvas id="trig-canvas" width="260" height="260"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!--         STATISTICS PANEL              -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tool-stats" class="tool-panel">
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Statistics Calculator</div>
+
+        <div class="sub-tab-bar">
+          <button class="sub-tab-btn active" onclick="statsSwitchMode(0)" id="stats-tab-0">Descriptive Stats</button>
+          <button class="sub-tab-btn" onclick="statsSwitchMode(1)" id="stats-tab-1">Correlation</button>
+        </div>
+
+        <!-- Descriptive -->
+        <div id="stats-panel-0" class="sub-panel active">
+          <div class="field">
+            <label>Dataset (comma-separated)</label>
+            <input id="stats-data" type="text" value="4, 7, 13, 2, 8, 9, 4, 7, 4" placeholder="e.g. 2, 4, 6, 8, 10">
+          </div>
+          <div class="sample-pills" style="margin-bottom:1rem">
+            <span class="sample-pill" onclick="statsSample(1)">Sample A</span>
+            <span class="sample-pill" onclick="statsSample(2)">Sample B</span>
+          </div>
+          <div id="stats-error" class="alert alert-danger hidden"></div>
+          <button class="btn btn-primary btn-full" onclick="calcStats()">Σ Calculate Statistics</button>
+          <details style="margin-top:1rem">
+            <div class="formula-ref">
+              <summary>Formula Reference</summary>
+              <div class="formula-ref-body">
+                <span class="f-line">Mean = Σxᵢ / n</span><br>
+                Median = middle value (sorted)<br>
+                Mode = most frequent value<br>
+                <span class="f-line">Variance σ² = Σ(xᵢ − x̄)² / n</span><br>
+                SD σ = √(Variance)
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Correlation -->
+        <div id="stats-panel-1" class="sub-panel">
+          <div class="field">
+            <label>Dataset X (comma-separated)</label>
+            <input id="corr-x" type="text" value="1, 2, 3, 4, 5" placeholder="x values">
+          </div>
+          <div class="field">
+            <label>Dataset Y (comma-separated)</label>
+            <input id="corr-y" type="text" value="2, 4, 5, 4, 5" placeholder="y values">
+          </div>
+          <div id="corr-error" class="alert alert-danger hidden"></div>
+          <button class="btn btn-primary btn-full" onclick="calcCorrelation()">Calculate Correlation</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Statistical Results</div>
+        <div id="stats-results-area">
+          <div class="empty-state"><div class="empty-icon">Σ</div><div>Enter a dataset and calculate</div></div>
+        </div>
+        <div class="stats-canvas-wrap" style="margin-top:1rem">
+          <canvas id="stats-canvas" height="200" style="display:block;width:100%"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!--      COORDINATE GEOMETRY PANEL        -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tool-coordgeo" class="tool-panel">
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Coordinate Geometry</div>
+
+        <div class="sub-tab-bar">
+          <button class="sub-tab-btn active" onclick="cgSwitchMode(0)" id="cg-tab-0">Points & Line</button>
+          <button class="sub-tab-btn" onclick="cgSwitchMode(1)" id="cg-tab-1">Section Formula</button>
+          <button class="sub-tab-btn" onclick="cgSwitchMode(2)" id="cg-tab-2">Pt–Line Distance</button>
+        </div>
+
+        <!-- Points & Line -->
+        <div id="cg-panel-0" class="sub-panel active">
+          <div class="field field-row cols-2">
+            <div><label>x₁</label><input id="cg-x1" type="number" value="1" step="any"></div>
+            <div><label>y₁</label><input id="cg-y1" type="number" value="2" step="any"></div>
+          </div>
+          <div class="field field-row cols-2">
+            <div><label>x₂</label><input id="cg-x2" type="number" value="4" step="any"></div>
+            <div><label>y₂</label><input id="cg-y2" type="number" value="6" step="any"></div>
+          </div>
+          <div id="cg-error" class="alert alert-danger hidden"></div>
+          <button class="btn btn-primary btn-full" onclick="calcCG()">⊙ Calculate</button>
+          <details style="margin-top:1rem">
+            <div class="formula-ref">
+              <summary>Formula Reference</summary>
+              <div class="formula-ref-body">
+                <span class="f-line">Distance = √[(x₂−x₁)² + (y₂−y₁)²]</span><br>
+                Midpoint = ((x₁+x₂)/2, (y₁+y₂)/2)<br>
+                Slope m = (y₂−y₁)/(x₂−x₁)<br>
+                <span class="f-line">Line: y − y₁ = m(x − x₁)</span>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Section Formula -->
+        <div id="cg-panel-1" class="sub-panel">
+          <p style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-bottom:1rem">Point P divides line A(x₁,y₁)–B(x₂,y₂) in ratio m:n</p>
+          <div class="field field-row cols-2">
+            <div><label>x₁, y₁</label><input id="sec-x1" type="number" value="1" step="any"><input id="sec-y1" type="number" value="2" step="any" style="margin-top:0.4rem"></div>
+            <div><label>x₂, y₂</label><input id="sec-x2" type="number" value="7" step="any"><input id="sec-y2" type="number" value="8" step="any" style="margin-top:0.4rem"></div>
+          </div>
+          <div class="field field-row cols-2">
+            <div><label>m (ratio)</label><input id="sec-m" type="number" value="2" step="any"></div>
+            <div><label>n (ratio)</label><input id="sec-n" type="number" value="1" step="any"></div>
+          </div>
+          <div class="field">
+            <label>Division Type</label>
+            <select id="sec-type">
+              <option value="internal">Internal Division</option>
+              <option value="external">External Division</option>
+            </select>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="calcSection()">Calculate Section Point</button>
+        </div>
+
+        <!-- Pt-Line Distance -->
+        <div id="cg-panel-2" class="sub-panel">
+          <p style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-bottom:1rem">Distance of point (x₀, y₀) from line ax + by + c = 0</p>
+          <div class="field field-row cols-2">
+            <div><label>Point x₀</label><input id="ptl-x0" type="number" value="3" step="any"></div>
+            <div><label>Point y₀</label><input id="ptl-y0" type="number" value="4" step="any"></div>
+          </div>
+          <div class="field field-row cols-3">
+            <div><label>a</label><input id="ptl-a" type="number" value="3" step="any"></div>
+            <div><label>b</label><input id="ptl-b" type="number" value="-4" step="any"></div>
+            <div><label>c</label><input id="ptl-c" type="number" value="5" step="any"></div>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="calcPtLine()">Calculate Distance</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Results</div>
+        <div id="cg-results-area">
+          <div class="empty-state"><div class="empty-icon">⊙</div><div>Enter coordinates and calculate</div></div>
+        </div>
+        <div class="graph-canvas-wrap" style="margin-top:1rem">
+          <canvas id="cg-canvas" height="260" style="display:block;width:100%"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!--       PROGRESSIONS (AP/GP) PANEL      -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tool-progression" class="tool-panel">
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Arithmetic &amp; Geometric Progressions</div>
+
+        <div class="sub-tab-bar">
+          <button class="sub-tab-btn active" onclick="progSwitchMode(0)" id="prog-tab-0">AP Calculator</button>
+          <button class="sub-tab-btn" onclick="progSwitchMode(1)" id="prog-tab-1">GP Calculator</button>
+          <button class="sub-tab-btn" onclick="progSwitchMode(2)" id="prog-tab-2">Identify Sequence</button>
+        </div>
+
+        <!-- AP -->
+        <div id="prog-panel-0" class="sub-panel active">
+          <div class="field field-row cols-3">
+            <div><label>First term (a)</label><input id="ap-a" type="number" value="2" step="any"></div>
+            <div><label>Common diff (d)</label><input id="ap-d" type="number" value="3" step="any"></div>
+            <div><label>Number of terms (n)</label><input id="ap-n" type="number" value="10" min="1"></div>
+          </div>
+          <div id="ap-error" class="alert alert-danger hidden"></div>
+          <button class="btn btn-primary btn-full" onclick="calcAP()">Calculate AP</button>
+          <details style="margin-top:1rem">
+            <div class="formula-ref">
+              <summary>AP Formula Reference</summary>
+              <div class="formula-ref-body">
+                <span class="f-line">aₙ = a + (n−1)d</span><br>
+                Sₙ = n/2 × [2a + (n−1)d]<br>
+                Sₙ = n/2 × (a + l) where l = last term<br>
+                <span class="f-line">AM of a and b = (a+b)/2</span>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- GP -->
+        <div id="prog-panel-1" class="sub-panel">
+          <div class="field field-row cols-3">
+            <div><label>First term (a)</label><input id="gp-a" type="number" value="3" step="any"></div>
+            <div><label>Common ratio (r)</label><input id="gp-r" type="number" value="2" step="any"></div>
+            <div><label>Number of terms (n)</label><input id="gp-n" type="number" value="6" min="1"></div>
+          </div>
+          <div id="gp-error" class="alert alert-danger hidden"></div>
+          <button class="btn btn-primary btn-full" onclick="calcGP()">Calculate GP</button>
+          <details style="margin-top:1rem">
+            <div class="formula-ref">
+              <summary>GP Formula Reference</summary>
+              <div class="formula-ref-body">
+                <span class="f-line">aₙ = a · rⁿ⁻¹</span><br>
+                Sₙ = a(rⁿ − 1)/(r − 1) when r ≠ 1<br>
+                S∞ = a/(1−r) when |r| &lt; 1<br>
+                <span class="f-line">GM of a and b = √(ab)</span>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- Identify -->
+        <div id="prog-panel-2" class="sub-panel">
+          <div class="field">
+            <label>Sequence (comma-separated)</label>
+            <input id="seq-data" type="text" value="2, 5, 8, 11, 14" placeholder="e.g. 3, 6, 12, 24">
+          </div>
+          <div id="seq-error" class="alert alert-danger hidden"></div>
+          <button class="btn btn-primary btn-full" onclick="identifySeq()">Identify Sequence</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>Results</div>
+        <div id="prog-results-area">
+          <div class="empty-state"><div class="empty-icon">∑</div><div>Enter values and calculate</div></div>
+        </div>
+        <div class="graph-canvas-wrap" style="margin-top:1rem">
+          <canvas id="prog-canvas" height="220" style="display:block;width:100%"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>DESIGN &amp; DEVELOPED BY — <span>KESHAV KUMAR</span></p>
+    <p style="margin-top:0.5rem; color:var(--accent); letter-spacing:0.15em">◈ ALL COPYRIGHT RESERVED <span id="footer-year">2026</span> — CENTURATOR ◈</p>
+    <p style="margin-top:0.3rem; color:var(--accent3); letter-spacing:0.2em; font-size:0.6rem">CENTURATOR BY KR CENTURY</p>
+  </footer>
+
+</div><!-- /container -->
+
+<script>
+// ══════════════════════════════════════════════
+//  UTILITIES
+// ══════════════════════════════════════════════
+function ev(expr, x) {
+  try {
+    const code = expr.replace(/\^/g, '**');
+    return new Function('x','Math',`with(Math){return (${code})+0;}`)(x, Math);
+  } catch { return NaN; }
+}
+
+function fmt(n, d = 7) {
+  if (typeof n !== 'number' || isNaN(n)) return 'NaN';
+  if (!isFinite(n)) return n > 0 ? '+∞' : '−∞';
+  return parseFloat(n.toFixed(d)).toString();
+}
+
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (msg) { el.textContent = '⚠ ' + msg; el.classList.remove('hidden'); }
+  else { el.classList.add('hidden'); }
+}
+
+function hideError(id) { showError(id, null); }
+
+function copyText(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).catch(() => {});
+}
+
+function show(id)  { document.getElementById(id)?.classList.remove('hidden'); }
+function hide(id)  { document.getElementById(id)?.classList.add('hidden'); }
+
+// ══════════════════════════════════════════════
+//  TAB SWITCHING
+// ══════════════════════════════════════════════
+const toolIds = ['tool-root','tool-matrix','tool-integration','tool-diff','tool-vector','tool-equations','tool-geometry','tool-trig','tool-stats','tool-coordgeo','tool-progression'];
+function switchTool(n) {
+  toolIds.forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById(toolIds[n]).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+n).classList.add('active');
+  if (n === 1 && document.getElementById('matrix-container').childElementCount === 0) {
+    createMatrixInput();
+  }
+}
+
+// ══════════════════════════════════════════════
+//  ROOT FINDING
+// ══════════════════════════════════════════════
+function onMethodChange() {
+  const m = document.getElementById('method').value;
+  document.getElementById('df_div').classList.toggle('hidden', m !== 'newton');
+  document.getElementById('b_div').classList.toggle('hidden', m === 'newton');
+  document.getElementById('a_label').textContent = m === 'newton' ? 'Initial Guess x₀' : (m === 'secant' ? 'x₀ (first)' : 'Lower Bound a');
+  document.getElementById('b_label').textContent = m === 'secant' ? 'x₁ (second)' : 'Upper Bound b';
+}
+
+function solveRoot() {
+  hideError('root-error');
+  const method  = document.getElementById('method').value;
+  const fxStr   = document.getElementById('fx').value.trim();
+  const dfxStr  = document.getElementById('dfx').value.trim();
+  let   a       = parseFloat(document.getElementById('a').value);
+  let   b       = parseFloat(document.getElementById('b').value);
+  const tol     = parseFloat(document.getElementById('tol').value)    || 1e-7;
+  const maxIter = parseInt  (document.getElementById('maxiter').value) || 50;
+
+  if (!fxStr) return showError('root-error','Please enter f(x).');
+  if (isNaN(a)) return showError('root-error','Enter a valid value for a / x₀.');
+
+  let steps = [], root = NaN, converged = false, iterCount = 0;
+
+  if (method === 'bisection' || method === 'falsi') {
+    if (isNaN(b)) return showError('root-error','Enter a valid b.');
+    let fa = ev(fxStr, a), fb = ev(fxStr, b);
+    if (isNaN(fa) || isNaN(fb)) return showError('root-error','f(x) returned NaN at endpoints.');
+    if (fa * fb >= 0) return showError('root-error','f(a)·f(b) ≥ 0. No sign change — root may not exist in [a, b].');
+
+    for (let i = 0; i < maxIter; i++) {
+      let c = method === 'bisection' ? (a + b) / 2 : (a * fb - b * fa) / (fb - fa);
+      let fc = ev(fxStr, c);
+      iterCount++;
+      steps.push({ iter:i+1, a:fmt(a,6), b:fmt(b,6), c:fmt(c,6), fa:fmt(fa,6), fb:fmt(fb,6), fc:fmt(fc,6) });
+      if (isNaN(fc)) { showError('root-error','f(c) evaluated to NaN.'); break; }
+      if (Math.abs(fc) < tol || Math.abs(b - a) < tol) { root = c; converged = true; break; }
+      if (fa * fc < 0) { b = c; fb = fc; } else { a = c; fa = fc; }
+    }
+    if (!converged && !isNaN(ev(fxStr,(parseFloat(document.getElementById('a').value)+b)/2))) {
+      root = steps[steps.length-1] ? parseFloat(steps[steps.length-1].c) : NaN;
+    }
+
+  } else if (method === 'secant') {
+    if (isNaN(b)) return showError('root-error','Enter a valid x₁.');
+    let x0 = a, x1 = b;
+    for (let i = 0; i < maxIter; i++) {
+      let fx0 = ev(fxStr, x0), fx1 = ev(fxStr, x1);
+      if (Math.abs(fx1 - fx0) < 1e-14) { showError('root-error','Division by near-zero in Secant.'); break; }
+      let x2 = x1 - fx1 * (x1 - x0) / (fx1 - fx0);
+      iterCount++;
+      steps.push({ iter:i+1, x0:fmt(x0,6), x1:fmt(x1,6), fx0:fmt(fx0,6), fx1:fmt(fx1,6), x2:fmt(x2,6) });
+      if (Math.abs(x2 - x1) < tol || Math.abs(ev(fxStr, x2)) < tol) { root = x2; converged = true; break; }
+      x0 = x1; x1 = x2;
+    }
+    if (!converged && steps.length) root = parseFloat(steps[steps.length-1].x2);
+
+  } else if (method === 'newton') {
+    if (!dfxStr) return showError('root-error','Please enter f′(x) for Newton-Raphson.');
+    let x = a;
+    for (let i = 0; i < maxIter; i++) {
+      let fv = ev(fxStr, x), dv = ev(dfxStr, x);
+      if (isNaN(fv) || isNaN(dv)) { showError('root-error','f(x) or f′(x) returned NaN.'); break; }
+      if (Math.abs(dv) < 1e-14) { showError('root-error','f′(x) ≈ 0. Newton-Raphson failed.'); break; }
+      let x1 = x - fv / dv;
+      iterCount++;
+      steps.push({ iter:i+1, x:fmt(x,6), fx:fmt(fv,6), dfx:fmt(dv,6), x1:fmt(x1,6), err:fmt(Math.abs(x1-x),8) });
+      if (Math.abs(x1 - x) < tol || Math.abs(fv) < tol) { root = x1; converged = true; break; }
+      x = x1;
+    }
+    if (!converged && steps.length) root = parseFloat(steps[steps.length-1].x1);
+  }
+
+  // Render results
+  hide('root-empty');
+  show('root-final');
+
+  document.getElementById('root-value-text').textContent = isNaN(root) ? 'Did not converge' : fmt(root, 8);
+  document.getElementById('root-iters').textContent      = converged ? `✓ Converged in ${iterCount} iterations` : `⚠ Max iterations (${iterCount}) reached`;
+  document.getElementById('root-fval').textContent       = isNaN(root) ? '—' : fmt(ev(fxStr, root), 6);
+  document.getElementById('root-iter-count').textContent = iterCount;
+  const labels = { bisection:'Bisection', falsi:'Regula-Falsi', secant:'Secant', newton:'Newton-Raphson' };
+  document.getElementById('root-method-label').textContent = labels[method] || method;
+
+  // Table
+  const thead = document.getElementById('root-thead');
+  const tbody = document.getElementById('root-tbody');
+  thead.innerHTML = ''; tbody.innerHTML = '';
+
+  if (method === 'newton') {
+    thead.innerHTML = `<th>Iter</th><th>xₙ</th><th>f(xₙ)</th><th>f′(xₙ)</th><th>xₙ₊₁</th><th>|error|</th>`;
+    steps.forEach(s => {
+      tbody.insertAdjacentHTML('beforeend',
+        `<tr><td>${s.iter}</td><td>${s.x}</td><td>${s.fx}</td><td>${s.dfx}</td><td class="accent">${s.x1}</td><td class="accent-yellow">${s.err}</td></tr>`);
+    });
+  } else if (method === 'secant') {
+    thead.innerHTML = `<th>Iter</th><th>x₀</th><th>x₁</th><th>f(x₀)</th><th>f(x₁)</th><th>x₂ (new)</th>`;
+    steps.forEach(s => {
+      tbody.insertAdjacentHTML('beforeend',
+        `<tr><td>${s.iter}</td><td>${s.x0}</td><td>${s.x1}</td><td>${s.fx0}</td><td>${s.fx1}</td><td class="accent">${s.x2}</td></tr>`);
+    });
+  } else {
+    thead.innerHTML = `<th>Iter</th><th>a</th><th>b</th><th>c (root)</th><th>f(a)</th><th>f(b)</th><th>f(c)</th>`;
+    steps.forEach(s => {
+      tbody.insertAdjacentHTML('beforeend',
+        `<tr><td>${s.iter}</td><td>${s.a}</td><td>${s.b}</td><td class="accent">${s.c}</td><td>${s.fa}</td><td>${s.fb}</td><td class="accent-yellow">${s.fc}</td></tr>`);
+    });
+  }
+}
+
+function clearRoot() {
+  document.getElementById('fx').value      = 'x**3 - 2*x - 5';
+  document.getElementById('dfx').value     = '3*x**2 - 2';
+  document.getElementById('a').value       = '2';
+  document.getElementById('b').value       = '3';
+  document.getElementById('tol').value     = '0.0001';
+  document.getElementById('maxiter').value = '30';
+  hide('root-final'); show('root-empty'); hideError('root-error');
+}
+
+function loadSample(n) {
+  const m = document.getElementById('method').value;
+  if (n === 1) {
+    document.getElementById('fx').value  = 'x**3 - 2*x - 5';
+    document.getElementById('dfx').value = '3*x**2 - 2';
+    document.getElementById('a').value   = '2';
+    document.getElementById('b').value   = '3';
+  } else if (n === 2) {
+    document.getElementById('fx').value  = 'x**2 - 3';
+    document.getElementById('dfx').value = '2*x';
+    document.getElementById('a').value   = '1';
+    document.getElementById('b').value   = '2';
+  } else if (n === 3) {
+    document.getElementById('fx').value  = 'Math.cos(x) - x';
+    document.getElementById('dfx').value = '-Math.sin(x) - 1';
+    document.getElementById('a').value   = '0';
+    document.getElementById('b').value   = '2';
+  } else if (n === 4) {
+    document.getElementById('fx').value  = 'Math.exp(x) - 3*x';
+    document.getElementById('dfx').value = 'Math.exp(x) - 3';
+    document.getElementById('a').value   = '0';
+    document.getElementById('b').value   = '2';
+  }
+  solveRoot();
+}
+
+// ══════════════════════════════════════════════
+//  MATRIX
+// ══════════════════════════════════════════════
+let matInputs = [];
+function createMatrixInput() {
+  const sz = Math.max(1, Math.min(6, parseInt(document.getElementById('matrix-size').value) || 3));
+  document.getElementById('matrix-size').value = sz;
+  const cont = document.getElementById('matrix-container');
+  cont.innerHTML = '';
+  cont.style.gridTemplateColumns = `repeat(${sz}, 1fr)`;
+  matInputs = [];
+  for (let i = 0; i < sz * sz; i++) {
+    const inp = document.createElement('input');
+    inp.type  = 'number'; inp.step = 'any'; inp.value = '0';
+    inp.className = '';
+    cont.appendChild(inp);
+    matInputs.push(inp);
+  }
+  document.getElementById('matrix-result').innerHTML = '<div class="empty-state"><div class="empty-icon">⊞</div><div>Select an operation above</div></div>';
+  hideError('mat-error');
+}
+
+function fillMatrixRandom() {
+  matInputs.forEach(inp => { inp.value = (Math.floor(Math.random() * 19) - 9).toString(); });
+}
+
+function fillMatrixIdentity() {
+  const n = Math.round(Math.sqrt(matInputs.length));
+  matInputs.forEach((inp,i) => { inp.value = (Math.floor(i/n) === i%n) ? '1' : '0'; });
+}
+
+function clearMatrix() { matInputs.forEach(inp => { inp.value = '0'; }); }
+
+function getMatrix() {
+  const n = Math.round(Math.sqrt(matInputs.length));
+  return Array.from({length:n}, (_,i) =>
+    Array.from({length:n}, (_,j) => parseFloat(matInputs[i*n+j].value) || 0));
+}
+
+function det(mat) {
+  const n = mat.length;
+  if (n === 1) return mat[0][0];
+  if (n === 2) return mat[0][0]*mat[1][1] - mat[0][1]*mat[1][0];
+  let s = 0, sg = 1;
+  for (let j = 0; j < n; j++) {
+    const sub = mat.slice(1).map(row => row.filter((_,idx) => idx !== j));
+    s += sg * mat[0][j] * det(sub);
+    sg = -sg;
+  }
+  return s;
+}
+
+function matMul(A, B) {
+  const n = A.length;
+  return Array.from({length:n}, (_,i) =>
+    Array.from({length:n}, (_,j) =>
+      A[i].reduce((sum,_,k) => sum + A[i][k]*B[k][j], 0)));
+}
+
+function matPow(mat, p) {
+  if (p === 0) return Array.from({length:mat.length}, (_,i) => Array.from({length:mat.length}, (_,j) => i===j?1:0));
+  if (p === 1) return mat.map(r => [...r]);
+  let res = mat.map(r => [...r]);
+  for (let i = 1; i < p; i++) res = matMul(res, mat);
+  return res;
+}
+
+function matTranspose(mat) {
+  return mat[0].map((_,j) => mat.map(row => row[j]));
+}
+
+function matInverse(mat) {
+  const n = mat.length;
+  const d = det(mat);
+  if (Math.abs(d) < 1e-12) return null; // singular
+
+  // Gauss-Jordan
+  const aug = mat.map((row,i) => [...row, ...Array.from({length:n},(_,j) => i===j?1:0)]);
+  for (let col = 0; col < n; col++) {
+    // Find pivot
+    let maxRow = col;
+    for (let r = col+1; r < n; r++)
+      if (Math.abs(aug[r][col]) > Math.abs(aug[maxRow][col])) maxRow = r;
+    [aug[col], aug[maxRow]] = [aug[maxRow], aug[col]];
+    if (Math.abs(aug[col][col]) < 1e-14) return null;
+    const piv = aug[col][col];
+    for (let j = 0; j < 2*n; j++) aug[col][j] /= piv;
+    for (let r = 0; r < n; r++) {
+      if (r === col) continue;
+      const f = aug[r][col];
+      for (let j = 0; j < 2*n; j++) aug[r][j] -= f * aug[col][j];
+    }
+  }
+  return aug.map(row => row.slice(n));
+}
+
+function fmtMat(mat) {
+  const n = mat.length;
+  const maxW = mat.flat().reduce((mx,v) => Math.max(mx, fmt(v,4).length), 0);
+  return mat.map(row => '│ ' + row.map(v => fmt(v,4).padStart(maxW+1)).join('  ') + '  │').join('\n');
+}
+
+function matOp(op) {
+  hideError('mat-error');
+  if (matInputs.length === 0) { createMatrixInput(); }
+  const mat = getMatrix();
+  const resDiv = document.getElementById('matrix-result');
+  const n = mat.length;
+
+  if (op === 'power') {
+    document.getElementById('power-row').classList.toggle('hidden', false);
+    const pw = parseInt(document.getElementById('custom-power').value) || 2;
+    const r = matPow(mat, pw);
+    resDiv.innerHTML = `<div style="color:var(--accent);font-size:0.8rem;margin-bottom:0.5rem">A<sup>${pw}</sup></div><pre>${fmtMat(r)}</pre>`;
+    return;
+  }
+  document.getElementById('power-row').classList.add('hidden');
+
+  if (op === 'det') {
+    const d = det(mat);
+    const singular = Math.abs(d) < 1e-10;
+    resDiv.innerHTML = `<div style="font-size:1.1rem;margin-bottom:0.5rem">det(A) = <span style="color:var(--accent);font-size:1.5rem;font-weight:700">${fmt(d,6)}</span></div>`
+      + (singular ? `<div class="badge badge-warn">Matrix is singular (det ≈ 0)</div>` : `<div class="badge">Non-singular matrix</div>`);
+    return;
+  }
+
+  if (op === 'trace') {
+    const tr = mat.reduce((s,row,i) => s + row[i], 0);
+    resDiv.innerHTML = `<div>tr(A) = <span style="color:var(--accent);font-size:1.5rem;font-weight:700">${fmt(tr,6)}</span></div>`;
+    return;
+  }
+
+  if (op === 'transpose') {
+    const T = matTranspose(mat);
+    resDiv.innerHTML = `<div style="color:var(--accent3);font-size:0.8rem;margin-bottom:0.5rem">Aᵀ (Transpose)</div><pre>${fmtMat(T)}</pre>`;
+    return;
+  }
+
+  if (op === 'inverse') {
+    const inv = matInverse(mat);
+    if (!inv) { showError('mat-error','Matrix is singular — inverse does not exist (det ≈ 0).'); resDiv.innerHTML = ''; return; }
+    resDiv.innerHTML = `<div style="color:var(--accent2);font-size:0.8rem;margin-bottom:0.5rem">A⁻¹ (Inverse)</div><pre>${fmtMat(inv)}</pre>`;
+    return;
+  }
+
+  const pow = op === 'square' ? 2 : 3;
+  const r = matPow(mat, pow);
+  resDiv.innerHTML = `<div style="color:var(--accent);font-size:0.8rem;margin-bottom:0.5rem">A<sup>${pow}</sup></div><pre>${fmtMat(r)}</pre>`;
+}
+
+// ══════════════════════════════════════════════
+//  INTEGRATION
+// ══════════════════════════════════════════════
+function intSample(n) {
+  const s = [{fx:'x**2',a:'0',b:'2',n:'4'},{fx:'Math.sin(x)',a:'0',b:'3.14159',n:'6'},{fx:'Math.exp(x)',a:'0',b:'1',n:'4'},{fx:'1/(1+x**2)',a:'0',b:'1',n:'8'}][n-1];
+  if (!s) return;
+  document.getElementById('int-fx').value = s.fx;
+  document.getElementById('int-a').value  = s.a;
+  document.getElementById('int-b').value  = s.b;
+  document.getElementById('int-n').value  = s.n;
+  calcIntegration();
+}
+
+function calcIntegration() {
+  hideError('int-error');
+  const method = document.getElementById('int-method').value;
+  const fxStr  = document.getElementById('int-fx').value.trim();
+  const a      = parseFloat(document.getElementById('int-a').value);
+  const b      = parseFloat(document.getElementById('int-b').value);
+  let n        = parseInt(document.getElementById('int-n').value);
+
+  if (!fxStr) return showError('int-error','Enter f(x).');
+  if (isNaN(a) || isNaN(b)) return showError('int-error','Enter valid limits.');
+  if (a >= b) return showError('int-error','Lower limit must be less than upper limit.');
+  if (n < 2) return showError('int-error','Need at least 2 intervals.');
+
+  // Fix n for rules
+  if (method === 'simpson13' && n % 2 !== 0) { n++; document.getElementById('int-n').value = n; }
+  if (method === 'simpson38' && n % 3 !== 0) { n = n + (3 - n % 3); document.getElementById('int-n').value = n; }
+
+  const h = (b - a) / n;
+  const xs = Array.from({length: n+1}, (_, i) => a + i * h);
+  const ys = xs.map(x => ev(fxStr, x));
+
+  if (ys.some(v => isNaN(v))) return showError('int-error','f(x) returned NaN for one or more x values.');
+
+  let area = 0;
+  const weights = Array(n+1).fill(0);
+
+  if (method === 'trapezoidal') {
+    weights[0] = 1; weights[n] = 1;
+    for (let i = 1; i < n; i++) weights[i] = 2;
+    area = (h / 2) * weights.reduce((s, w, i) => s + w * ys[i], 0);
+  } else if (method === 'simpson13') {
+    weights[0] = 1; weights[n] = 1;
+    for (let i = 1; i < n; i++) weights[i] = i % 2 === 0 ? 2 : 4;
+    area = (h / 3) * weights.reduce((s, w, i) => s + w * ys[i], 0);
+  } else { // simpson38
+    weights[0] = 1; weights[n] = 1;
+    for (let i = 1; i < n; i++) weights[i] = i % 3 === 0 ? 2 : 3;
+    area = (3 * h / 8) * weights.reduce((s, w, i) => s + w * ys[i], 0);
+  }
+
+  // Show results
+  show('int-result-area'); hide('int-empty');
+  document.getElementById('int-area-val').textContent = fmt(area, 8);
+  const labels = {trapezoidal:'Trapezoidal Rule', simpson13:"Simpson's 1/3 Rule", simpson38:"Simpson's 3/8 Rule"};
+  document.getElementById('int-sub').textContent = `${labels[method]} · ${n} intervals · h = ${fmt(h,5)}`;
+
+  // Formula box
+  const fb = document.getElementById('int-formula-box');
+  fb.classList.remove('hidden');
+  if (method === 'trapezoidal') {
+    fb.innerHTML = `Formula: I ≈ (h/2)[f(x₀) + 2f(x₁) + 2f(x₂) + ... + 2f(xₙ₋₁) + f(xₙ)] &nbsp;|&nbsp; h = ${fmt(h,5)}`;
+  } else if (method === 'simpson13') {
+    fb.innerHTML = `Formula: I ≈ (h/3)[f(x₀) + 4f(x₁) + 2f(x₂) + 4f(x₃) + ... + f(xₙ)] &nbsp;|&nbsp; h = ${fmt(h,5)}`;
+  } else {
+    fb.innerHTML = `Formula: I ≈ (3h/8)[f(x₀) + 3f(x₁) + 3f(x₂) + 2f(x₃) + ... + f(xₙ)] &nbsp;|&nbsp; h = ${fmt(h,5)}`;
+  }
+
+  // Table (show up to 20 rows)
+  const tbody = document.getElementById('int-tbody');
+  tbody.innerHTML = '';
+  const maxRows = Math.min(xs.length, 21);
+  for (let i = 0; i < maxRows; i++) {
+    const contrib = weights[i] * ys[i];
+    tbody.insertAdjacentHTML('beforeend',
+      `<tr><td>${i}</td><td>${fmt(xs[i],5)}</td><td>${fmt(ys[i],6)}</td><td class="accent">${weights[i]}</td><td class="accent-yellow">${fmt(contrib,6)}</td></tr>`);
+  }
+  if (xs.length > 21) {
+    tbody.insertAdjacentHTML('beforeend', `<tr><td colspan="5" style="color:var(--text-dim);text-align:center">... ${xs.length - 21} more rows hidden ...</td></tr>`);
+  }
+}
+
+// ══════════════════════════════════════════════
+//  DIFFERENTIATION
+// ══════════════════════════════════════════════
+function diffSample(n) {
+  const s = [{fx:'x**3',x:'2',h:'0.001'},{fx:'Math.sin(x)',x:(Math.PI/4).toString(),h:'0.001'},{fx:'Math.exp(x)',x:'1',h:'0.001'}][n-1];
+  if (!s) return;
+  document.getElementById('diff-fx').value = s.fx;
+  document.getElementById('diff-x').value  = s.x;
+  document.getElementById('diff-h').value  = s.h;
+  calcDiff();
+}
+
+function calcDiff() {
+  hideError('diff-error');
+  const fxStr  = document.getElementById('diff-fx').value.trim();
+  const x      = parseFloat(document.getElementById('diff-x').value);
+  const h      = parseFloat(document.getElementById('diff-h').value);
+  const method = document.getElementById('diff-method').value;
+
+  if (!fxStr) return showError('diff-error','Enter f(x).');
+  if (isNaN(x)) return showError('diff-error','Enter a valid x.');
+  if (isNaN(h) || h <= 0) return showError('diff-error','Step h must be > 0.');
+
+  const fxmh = ev(fxStr, x - h);
+  const fxv  = ev(fxStr, x);
+  const fxph = ev(fxStr, x + h);
+
+  let val;
+  if (method === 'central')  val = (fxph - fxmh) / (2 * h);
+  else if (method === 'forward')  val = (fxph - fxv) / h;
+  else                             val = (fxv  - fxmh) / h;
+
+  if (isNaN(val)) return showError('diff-error','Result is NaN. Check your function or parameters.');
+
+  show('diff-result-area'); hide('diff-empty');
+  document.getElementById('diff-val').textContent = fmt(val, 8);
+  const mlabel = {central:'Central Difference [O(h²)]', forward:'Forward Difference [O(h)]', backward:'Backward Difference [O(h)]'};
+  document.getElementById('diff-sub').textContent = `${mlabel[method]} · x = ${fmt(x,4)} · h = ${fmt(h,5)}`;
+
+  document.getElementById('diff-fxmh').textContent = fmt(fxmh, 6);
+  document.getElementById('diff-fx-val').textContent = fmt(fxv, 6);
+  document.getElementById('diff-fxph').textContent = fmt(fxph, 6);
+
+  const fb = document.getElementById('diff-formula-box');
+  if (method === 'central')
+    fb.innerHTML = `f′(x) ≈ [f(x+h) − f(x−h)] / 2h = [${fmt(fxph,5)} − ${fmt(fxmh,5)}] / ${fmt(2*h,5)} = <span class="highlight">${fmt(val,6)}</span>`;
+  else if (method === 'forward')
+    fb.innerHTML = `f′(x) ≈ [f(x+h) − f(x)] / h = [${fmt(fxph,5)} − ${fmt(fxv,5)}] / ${fmt(h,5)} = <span class="highlight">${fmt(val,6)}</span>`;
+  else
+    fb.innerHTML = `f′(x) ≈ [f(x) − f(x−h)] / h = [${fmt(fxv,5)} − ${fmt(fxmh,5)}] / ${fmt(h,5)} = <span class="highlight">${fmt(val,6)}</span>`;
+}
+
+// ══════════════════════════════════════════════
+//  VECTORS
+// ══════════════════════════════════════════════
+function getVec(prefix) {
+  return {
+    x: parseFloat(document.getElementById('vec-'+prefix+'x').value) || 0,
+    y: parseFloat(document.getElementById('vec-'+prefix+'y').value) || 0,
+    z: parseFloat(document.getElementById('vec-'+prefix+'z').value) || 0,
+  };
+}
+
+function vecItem(label, value, colorClass) {
+  return `<div class="vec-result-item">
+    <span class="label">${label}</span>
+    <span class="value" style="color:${colorClass||'var(--accent)'}">${value}</span>
+  </div>`;
+}
+
+function vecOp(op) {
+  hideError('vec-error');
+  const A = getVec('a'), B = getVec('b');
+  const magA = Math.sqrt(A.x**2 + A.y**2 + A.z**2);
+  const magB = Math.sqrt(B.x**2 + B.y**2 + B.z**2);
+  const dot  = A.x*B.x + A.y*B.y + A.z*B.z;
+  const cross = { x: A.y*B.z - A.z*B.y, y: A.z*B.x - A.x*B.z, z: A.x*B.y - A.y*B.x };
+  const magCross = Math.sqrt(cross.x**2 + cross.y**2 + cross.z**2);
+  const angleRad = (magA > 0 && magB > 0) ? Math.acos(Math.min(1,Math.max(-1, dot / (magA * magB)))) : NaN;
+  const angleDeg = angleRad * 180 / Math.PI;
+
+  const res = document.getElementById('vec-results');
+  let html = '';
+
+  if (op === 'magnitude' || op === 'all') {
+    html += vecItem('|A| = √(Ax²+Ay²+Az²)', fmt(magA,6), 'var(--accent)');
+  }
+  if (op === 'magnitudeB' || op === 'all') {
+    html += vecItem('|B| = √(Bx²+By²+Bz²)', fmt(magB,6), 'var(--accent)');
+  }
+  if (op === 'dot' || op === 'all') {
+    html += vecItem('A·B = AxBx + AyBy + AzBz', fmt(dot,6), 'var(--accent2)');
+  }
+  if (op === 'cross' || op === 'all') {
+    html += vecItem('A×B vector', `(${fmt(cross.x,4)}î, ${fmt(cross.y,4)}ĵ, ${fmt(cross.z,4)}k̂)`, 'var(--accent3)');
+    html += vecItem('|A×B| magnitude', fmt(magCross,6), 'var(--accent3)');
+  }
+  if (op === 'angle' || op === 'all') {
+    if (isNaN(angleRad)) { showError('vec-error','Cannot compute angle — one vector has zero magnitude.'); }
+    else {
+      html += vecItem('Angle θ (radians)', fmt(angleRad,6), 'var(--accent)');
+      html += vecItem('Angle θ (degrees)', fmt(angleDeg,4) + '°', 'var(--accent2)');
+    }
+  }
+  if (op === 'unit' || op === 'all') {
+    if (magA < 1e-14) { showError('vec-error','|A| = 0 — unit vector undefined.'); }
+    else {
+      const ua = { x: A.x/magA, y: A.y/magA, z: A.z/magA };
+      html += vecItem('Â (unit vector)', `(${fmt(ua.x,5)}î, ${fmt(ua.y,5)}ĵ, ${fmt(ua.z,5)}k̂)`, 'var(--success)');
+    }
+  }
+
+  res.innerHTML = html || '<div class="empty-state"><div>No result</div></div>';
+}
+
+// ══════════════════════════════════════════════
+//  EQUATION SOLVER — SUB TABS
+// ══════════════════════════════════════════════
+function eqSwitchMode(n) {
+  for (let i = 0; i < 5; i++) {
+    document.getElementById('eq-panel-'+i)?.classList.remove('active');
+    document.getElementById('eq-tab-'+i)?.classList.remove('active');
+  }
+  document.getElementById('eq-panel-'+n)?.classList.add('active');
+  document.getElementById('eq-tab-'+n)?.classList.add('active');
+}
+
+// ── 2-Variable ──────────────────────────────
+function eq2Sample(n) {
+  const s = [
+    [2,3,8,1,-1,1],
+    [3,2,12,1,4,10],
+    [5,-1,7,2,3,1]
+  ][n-1];
+  ['e2-a1','e2-b1','e2-c1','e2-a2','e2-b2','e2-c2'].forEach((id,i) => {
+    document.getElementById(id).value = s[i];
+  });
+  solveEq2();
+}
+
+function solveEq2() {
+  hideError('eq2-error');
+  const a1=+document.getElementById('e2-a1').value, b1=+document.getElementById('e2-b1').value, c1=+document.getElementById('e2-c1').value;
+  const a2=+document.getElementById('e2-a2').value, b2=+document.getElementById('e2-b2').value, c2=+document.getElementById('e2-c2').value;
+  const D = a1*b2 - a2*b1;
+  if (Math.abs(D) < 1e-12) { showError('eq2-error','Determinant = 0. Equations are dependent or inconsistent.'); return; }
+  const x = (c1*b2 - c2*b1) / D;
+  const y = (a1*c2 - a2*c1) / D;
+  hide('eq2-empty'); show('eq2-result');
+  document.getElementById('eq2-chips').innerHTML =
+    `<div class="sol-chip"><span class="lbl">x =</span><span class="val">${fmt(x,6)}</span></div>
+     <div class="sol-chip"><span class="lbl">y =</span><span class="val">${fmt(y,6)}</span></div>
+     <div class="sol-chip" style="border-color:rgba(251,191,36,0.3)"><span class="lbl">D (det)</span><span class="val" style="color:var(--accent2)">${fmt(D,4)}</span></div>`;
+  document.getElementById('eq2-check').innerHTML =
+    `Verification: Eq1: ${fmt(a1*x+b1*y,4)} ≈ ${c1} | Eq2: ${fmt(a2*x+b2*y,4)} ≈ ${c2}
+     <br>Method: Cramer's Rule — D=${fmt(D,4)}, Dx=${fmt(c1*b2-c2*b1,4)}, Dy=${fmt(a1*c2-a2*c1,4)}`;
+  drawEq2Graph(a1,b1,c1,a2,b2,c2,x,y);
+}
+
+function drawEq2Graph(a1,b1,c1,a2,b2,c2,sx,sy) {
+  const canvas = document.getElementById('eq2-canvas');
+  canvas.width = canvas.offsetWidth || 520;
+  const W = canvas.width, H = canvas.height = 280;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+
+  const pad = 40;
+  const span = Math.max(10, Math.abs(sx)*2.5, Math.abs(sy)*2.5, 8);
+  const scaleX = (W-2*pad)/(2*span), scaleY = (H-2*pad)/(2*span);
+  const ox = W/2 - sx*scaleX, oy = H/2 + sy*scaleY;
+
+  // Grid
+  ctx.strokeStyle='rgba(0,210,200,0.07)'; ctx.lineWidth=1;
+  for(let gx=-span; gx<=span; gx++) {
+    const px=ox+gx*scaleX; ctx.beginPath(); ctx.moveTo(px,0); ctx.lineTo(px,H); ctx.stroke();
+  }
+  for(let gy=-span; gy<=span; gy++) {
+    const py=oy-gy*scaleY; ctx.beginPath(); ctx.moveTo(0,py); ctx.lineTo(W,py); ctx.stroke();
+  }
+  // Axes
+  ctx.strokeStyle='rgba(0,210,200,0.35)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(0,oy); ctx.lineTo(W,oy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ox,0); ctx.lineTo(ox,H); ctx.stroke();
+
+  // Tick labels
+  ctx.fillStyle='rgba(74,122,155,0.8)'; ctx.font='10px JetBrains Mono,monospace'; ctx.textAlign='center';
+  for(let gx=-Math.floor(span); gx<=Math.floor(span); gx+=Math.ceil(span/5)) {
+    if(gx===0) continue;
+    const px=ox+gx*scaleX;
+    ctx.fillText(gx, px, oy+14);
+  }
+  ctx.textAlign='right';
+  for(let gy=-Math.floor(span); gy<=Math.floor(span); gy+=Math.ceil(span/5)) {
+    if(gy===0) continue;
+    const py=oy-gy*scaleY;
+    ctx.fillText(gy, ox-4, py+4);
+  }
+
+  function plotLine(a,b,c,color) {
+    ctx.strokeStyle=color; ctx.lineWidth=2.5; ctx.beginPath();
+    let started=false;
+    for(let px=0; px<=W; px++) {
+      const xv=(px-ox)/scaleX;
+      let yv;
+      if(Math.abs(b)<1e-12) {
+        if(Math.abs(a)<1e-12) return;
+        const xline=c/a, plx=ox+xline*scaleX;
+        ctx.beginPath(); ctx.moveTo(plx,0); ctx.lineTo(plx,H); ctx.stroke(); return;
+      } else { yv=(c-a*xv)/b; }
+      const py=oy-yv*scaleY;
+      if(!started){ ctx.moveTo(px,py); started=true; } else { ctx.lineTo(px,py); }
+    }
+    ctx.stroke();
+  }
+
+  plotLine(a1,b1,c1,'rgba(0,210,200,0.9)');
+  plotLine(a2,b2,c2,'rgba(251,191,36,0.9)');
+
+  // Intersection point
+  ctx.fillStyle='#fff'; ctx.strokeStyle='var(--accent)'; ctx.lineWidth=2;
+  const px=ox+sx*scaleX, py=oy-sy*scaleY;
+  ctx.beginPath(); ctx.arc(px,py,6,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle='#fff'; ctx.font='bold 11px JetBrains Mono,monospace'; ctx.textAlign='left';
+  ctx.fillText(`(${fmt(sx,3)}, ${fmt(sy,3)})`, px+8, py-6);
+
+  // Legend
+  ctx.font='10px JetBrains Mono,monospace';
+  ctx.fillStyle='rgba(0,210,200,0.9)';
+  ctx.fillRect(pad,H-22,18,3);
+  ctx.fillText('Eq1',pad+22,H-16);
+  ctx.fillStyle='rgba(251,191,36,0.9)';
+  ctx.fillRect(pad+70,H-22,18,3);
+  ctx.fillText('Eq2',pad+92,H-16);
+}
+
+// ── 3-Variable ──────────────────────────────
+function buildEq3Rows() {
+  const container = document.getElementById('eq3-rows');
+  container.innerHTML = '';
+  const vars = ['x','y','z'], ids = [['a','b','c','d'],['e','f','g','h'],['i','j','k','l']];
+  const defaults = [[2,-1,3,9],[1,3,-2,3],[3,-2,1,1]];
+  for(let r=0;r<3;r++) {
+    const row = document.createElement('div');
+    row.className = 'eq-row eq-row-3v';
+    row.innerHTML = `
+      <input id="e3-${ids[r][0]}" type="number" value="${defaults[r][0]}" step="any">
+      <span class="eq-var">x +</span>
+      <input id="e3-${ids[r][1]}" type="number" value="${defaults[r][1]}" step="any">
+      <span class="eq-var">y +</span>
+      <input id="e3-${ids[r][2]}" type="number" value="${defaults[r][2]}" step="any">
+      <span class="eq-var">z =</span>
+      <input id="e3-${ids[r][3]}" type="number" value="${defaults[r][3]}" step="any">`;
+    container.appendChild(row);
+  }
+}
+
+function eq3Sample(n) {
+  const s = [
+    [[2,-1,3,9],[1,3,-2,3],[3,-2,1,1]],
+    [[1,2,3,14],[2,-1,1,3],[3,1,-1,4]]
+  ][n-1];
+  const ids=[['a','b','c','d'],['e','f','g','h'],['i','j','k','l']];
+  s.forEach((row,r)=>row.forEach((v,c)=>{ document.getElementById('e3-'+ids[r][c]).value=v; }));
+  solveEq3();
+}
+
+function gaussianElim(M) {
+  const n=M.length;
+  let mat=M.map(r=>[...r]);
+  for(let col=0;col<n;col++) {
+    let pivot=-1, maxVal=0;
+    for(let row=col;row<n;row++) if(Math.abs(mat[row][col])>maxVal){maxVal=Math.abs(mat[row][col]);pivot=row;}
+    if(pivot===-1||maxVal<1e-12) return null;
+    [mat[col],mat[pivot]]=[mat[pivot],mat[col]];
+    const div=mat[col][col];
+    mat[col]=mat[col].map(v=>v/div);
+    for(let r=0;r<n;r++){
+      if(r===col) continue;
+      const factor=mat[r][col];
+      mat[r]=mat[r].map((v,c)=>v-factor*mat[col][c]);
+    }
+  }
+  return mat.map(r=>r[n]);
+}
+
+function solveEq3() {
+  hideError('eq3-error');
+  const ids=[['a','b','c','d'],['e','f','g','h'],['i','j','k','l']];
+  const coeffs=ids.map(row=>row.map(id=>parseFloat(document.getElementById('e3-'+id)?.value)||0));
+  const A=coeffs.map(r=>r.slice(0,3)), B=coeffs.map(r=>r[3]);
+  const aug=A.map((row,i)=>[...row,B[i]]);
+  const sol=gaussianElim(aug);
+  if(!sol) { showError('eq3-error','No unique solution (determinant ≈ 0). System may be dependent or inconsistent.'); return; }
+  const [x,y,z]=sol;
+  hide('eq3-empty'); show('eq3-result');
+  document.getElementById('eq3-chips').innerHTML =
+    `<div class="sol-chip"><span class="lbl">x =</span><span class="val">${fmt(x,6)}</span></div>
+     <div class="sol-chip"><span class="lbl">y =</span><span class="val">${fmt(y,6)}</span></div>
+     <div class="sol-chip"><span class="lbl">z =</span><span class="val">${fmt(z,6)}</span></div>`;
+  const v0=A[0][0]*x+A[0][1]*y+A[0][2]*z, v1=A[1][0]*x+A[1][1]*y+A[1][2]*z, v2=A[2][0]*x+A[2][1]*y+A[2][2]*z;
+  document.getElementById('eq3-check').innerHTML =
+    `Verification:<br>Eq1: ${fmt(v0,4)} ≈ ${B[0]} &nbsp;|&nbsp; Eq2: ${fmt(v1,4)} ≈ ${B[1]} &nbsp;|&nbsp; Eq3: ${fmt(v2,4)} ≈ ${B[2]}<br>
+     Method: Gauss-Jordan Elimination with partial pivoting`;
+}
+
+// ── Quadratic ───────────────────────────────
+function qSample(n) {
+  const s=[[1,-3,2],[2,5,-3],[1,1,1],[1,0,-4]][n-1];
+  ['q-a','q-b','q-c'].forEach((id,i)=>{ document.getElementById(id).value=s[i]; });
+  solveQuad();
+}
+
+function solveQuad() {
+  hideError('quad-error');
+  const a=+document.getElementById('q-a').value, b=+document.getElementById('q-b').value, c=+document.getElementById('q-c').value;
+  if(a===0) { showError('quad-error','Coefficient a cannot be 0 (would be linear).'); return; }
+  const D=b*b-4*a*c;
+  hide('quad-empty'); show('quad-result');
+  let chipsHtml='', discHtml='';
+  if(D>0) {
+    const r1=(-b+Math.sqrt(D))/(2*a), r2=(-b-Math.sqrt(D))/(2*a);
+    chipsHtml=`<div class="root-chip"><span class="rk">Root x₁</span><span class="rv">${fmt(r1,6)}</span></div>
+               <div class="root-chip"><span class="rk">Root x₂</span><span class="rv">${fmt(r2,6)}</span></div>`;
+    discHtml=`Discriminant Δ = b²−4ac = ${fmt(D,4)} &gt; 0 → Two distinct real roots<br>x = (−b ± √Δ) / 2a`;
+    drawPolyGraph('quad-canvas', x=>a*x*x+b*x+c, [r1,r2], 'quadratic');
+  } else if(D===0) {
+    const r1=-b/(2*a);
+    chipsHtml=`<div class="root-chip"><span class="rk">Root x₁=x₂</span><span class="rv">${fmt(r1,6)}</span></div>`;
+    discHtml=`Discriminant Δ = 0 → One repeated real root`;
+    drawPolyGraph('quad-canvas', x=>a*x*x+b*x+c, [r1], 'quadratic');
+  } else {
+    const re=-b/(2*a), im=Math.sqrt(-D)/(2*a);
+    chipsHtml=`<div class="root-chip"><span class="rk">z₁</span><span class="rv">${fmt(re,4)} + ${fmt(im,4)}i</span></div>
+               <div class="root-chip"><span class="rk">z₂</span><span class="rv">${fmt(re,4)} − ${fmt(im,4)}i</span></div>`;
+    discHtml=`Discriminant Δ = ${fmt(D,4)} &lt; 0 → Two complex conjugate roots (no real roots)`;
+    drawPolyGraph('quad-canvas', x=>a*x*x+b*x+c, [], 'quadratic');
+  }
+  document.getElementById('quad-chips').innerHTML=chipsHtml;
+  document.getElementById('quad-disc').innerHTML=discHtml;
+}
+
+// ── Cubic ───────────────────────────────────
+function cuSample(n) {
+  const s=[[1,-6,11,-6],[1,0,-3,2],[1,1,-1,-1]][n-1];
+  ['cu-a','cu-b','cu-c','cu-d'].forEach((id,i)=>{ document.getElementById(id).value=s[i]; });
+  solveCubic();
+}
+
+function solveCubic() {
+  hideError('cubic-error');
+  const a=+document.getElementById('cu-a').value, b=+document.getElementById('cu-b').value;
+  const c=+document.getElementById('cu-c').value, d=+document.getElementById('cu-d').value;
+  if(a===0) { showError('cubic-error','Coefficient a cannot be 0.'); return; }
+  // Numerical root finding (Durand-Kerner)
+  const poly = x => a*x*x*x + b*x*x + c*x + d;
+  const roots = findPolyRoots(poly, 3, [-b/(3*a)-3, -b/(3*a), -b/(3*a)+3]);
+  hide('cubic-empty'); show('cubic-result');
+  const chipsHtml = roots.map((r,i)=>`<div class="root-chip"><span class="rk">Root x${i+1}</span><span class="rv">${r}</span></div>`).join('');
+  document.getElementById('cubic-chips').innerHTML = chipsHtml;
+  document.getElementById('cubic-info').innerHTML = `Cubic polynomial: ${a}x³ + ${b}x² + ${c}x + ${d} = 0<br>Solved via depressed cubic + Cardano/numerical method`;
+  const realRoots = roots.filter(r=>!r.includes('i')).map(r=>parseFloat(r));
+  drawPolyGraph('cubic-canvas', poly, realRoots, 'cubic');
+}
+
+// ── nth Degree ──────────────────────────────
+function buildNthInputs() {
+  const deg = Math.max(1, Math.min(10, parseInt(document.getElementById('nth-degree').value)||4));
+  const cont = document.getElementById('nth-inputs');
+  cont.innerHTML='';
+  for(let i=deg; i>=0; i--) {
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:0.5rem;font-family:JetBrains Mono,monospace;font-size:0.8rem;';
+    const lbl = i===0 ? 'const' : (i===1 ? 'x' : `x${i<=9?'⁰¹²³⁴⁵⁶⁷⁸⁹'[i]:'^'+i}`);
+    row.innerHTML=`<span style="color:var(--accent2);min-width:55px;">a[${i}] (${lbl})</span>
+      <input id="nth-c${i}" type="number" value="${i===deg?1:0}" step="any" style="width:80px;text-align:center;">`;
+    cont.appendChild(row);
+  }
+}
+
+function solveNth() {
+  hideError('nth-error');
+  const deg=Math.max(1,Math.min(10,parseInt(document.getElementById('nth-degree').value)||4));
+  const coeffs=[];
+  for(let i=deg;i>=0;i--) coeffs.push(parseFloat(document.getElementById('nth-c'+i)?.value)||0);
+  if(Math.abs(coeffs[0])<1e-12) { showError('nth-error','Leading coefficient cannot be 0.'); return; }
+  const poly = x => coeffs.reduce((s,c,i)=>s+c*Math.pow(x,deg-i),0);
+  // Scan for real roots numerically
+  const roots=[];
+  const step=0.05, range=20;
+  let prev=poly(-range);
+  for(let x=-range+step;x<=range;x+=step) {
+    const cur=poly(x);
+    if(prev*cur<0) {
+      // Bisect
+      let lo=x-step, hi=x;
+      for(let k=0;k<50;k++){const mid=(lo+hi)/2; if(poly(lo)*poly(mid)<0) hi=mid; else lo=mid;}
+      const r=(lo+hi)/2;
+      if(!roots.find(rr=>Math.abs(rr-r)<1e-4)) roots.push(r);
+    }
+    prev=cur;
+  }
+  hide('nth-empty'); show('nth-result');
+  const exps='⁰¹²³⁴⁵⁶⁷⁸⁹';
+  document.getElementById('nth-chips').innerHTML = roots.length
+    ? roots.map((r,i)=>`<div class="root-chip"><span class="rk">Root x${i+1}</span><span class="rv">${fmt(r,6)}</span></div>`).join('')
+    : '<div class="root-chip"><span class="rk">Real Roots</span><span class="rv">None found in [−20, 20]</span></div>';
+  drawPolyGraph('nth-canvas', poly, roots, 'nth');
+}
+
+function findPolyRoots(poly, deg, guesses) {
+  const roots=[];
+  let f=poly;
+  guesses.forEach(g=>{
+    let x=g;
+    for(let i=0;i<200;i++){
+      const fv=f(x), h=1e-6;
+      const dv=(f(x+h)-f(x-h))/(2*h);
+      if(Math.abs(dv)<1e-14) break;
+      const xn=x-fv/dv;
+      if(Math.abs(xn-x)<1e-8){x=xn;break;}
+      x=xn;
+    }
+    const fv=Math.abs(f(x));
+    if(fv<1e-4) {
+      if(!roots.find(r=>Math.abs(parseFloat(r)-x)<0.01))
+        roots.push(fmt(x,6));
+    } else {
+      roots.push(`${fmt(-g/(2*deg),4)} ± ${fmt(Math.sqrt(Math.abs(f(g)))/(2*deg),4)}i`);
+    }
+  });
+  return roots;
+}
+
+function drawPolyGraph(canvasId, fn, realRoots, type) {
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  canvas.width = canvas.offsetWidth || 520;
+  const W = canvas.width, H = canvas.height = 260;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+
+  const pad=40;
+  let xMin=-5, xMax=5;
+  if(realRoots.length>0) {
+    const mn=Math.min(...realRoots)-2, mx=Math.max(...realRoots)+2;
+    xMin=Math.min(mn,-3); xMax=Math.max(mx,3);
+  }
+  const xs=Array.from({length:W-2*pad+1},(_,i)=>xMin+(xMax-xMin)*i/(W-2*pad));
+  const ys=xs.map(x=>fn(x)).filter(v=>isFinite(v));
+  if(!ys.length) return;
+  const yMin=Math.max(Math.min(...ys),-50), yMax=Math.min(Math.max(...ys),50);
+  const yRange=yMax-yMin||1, xRange=xMax-xMin||1;
+  const toX=x=>pad+(x-xMin)/(xRange)*(W-2*pad);
+  const toY=y=>H-pad-(y-yMin)/yRange*(H-2*pad);
+
+  // Grid
+  ctx.strokeStyle='rgba(0,210,200,0.07)'; ctx.lineWidth=1;
+  for(let gx=Math.ceil(xMin);gx<=Math.floor(xMax);gx++) {
+    ctx.beginPath(); ctx.moveTo(toX(gx),pad); ctx.lineTo(toX(gx),H-pad); ctx.stroke();
+  }
+  const yStep=Math.pow(10,Math.floor(Math.log10(yRange/5)));
+  for(let gy=Math.ceil(yMin/yStep)*yStep;gy<=yMax;gy+=yStep) {
+    ctx.beginPath(); ctx.moveTo(pad,toY(gy)); ctx.lineTo(W-pad,toY(gy)); ctx.stroke();
+  }
+  // Axes
+  ctx.strokeStyle='rgba(0,210,200,0.4)'; ctx.lineWidth=1.5;
+  if(yMin<=0&&yMax>=0){ctx.beginPath();ctx.moveTo(pad,toY(0));ctx.lineTo(W-pad,toY(0));ctx.stroke();}
+  if(xMin<=0&&xMax>=0){ctx.beginPath();ctx.moveTo(toX(0),pad);ctx.lineTo(toX(0),H-pad);ctx.stroke();}
+
+  // Labels
+  ctx.fillStyle='rgba(74,122,155,0.9)'; ctx.font='10px JetBrains Mono,monospace'; ctx.textAlign='center';
+  for(let gx=Math.ceil(xMin);gx<=Math.floor(xMax);gx+=Math.max(1,Math.floor(xRange/8))){
+    ctx.fillText(gx, toX(gx), H-pad+14);
+  }
+
+  // Curve
+  ctx.strokeStyle='#00d2c8'; ctx.lineWidth=2.5; ctx.beginPath();
+  let started=false;
+  xs.forEach((x,i)=>{
+    const y=fn(x);
+    if(!isFinite(y)||y<yMin-yRange||y>yMax+yRange){started=false;return;}
+    const px=toX(x), py=toY(y);
+    if(!started){ctx.moveTo(px,py);started=true;}else{ctx.lineTo(px,py);}
+  });
+  ctx.stroke();
+
+  // Root markers
+  realRoots.forEach(r=>{
+    ctx.fillStyle='#fbbf24'; ctx.strokeStyle='#fff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(toX(r),toY(0),5,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#fbbf24'; ctx.font='bold 10px JetBrains Mono,monospace'; ctx.textAlign='center';
+    ctx.fillText(fmt(r,3),toX(r),toY(0)-10);
+  });
+
+  // x-axis label
+  ctx.fillStyle='rgba(0,210,200,0.6)'; ctx.font='10px JetBrains Mono,monospace'; ctx.textAlign='right';
+  ctx.fillText('f(x)',pad-4,pad+10);
+}
+
+// ══════════════════════════════════════════════
+//  GEOMETRY CALCULATOR
+// ══════════════════════════════════════════════
+const GEO_SHAPES = {
+  circle:    { label:'Circle',    fields:[{id:'r',  label:'Radius (r)'}] },
+  square:    { label:'Square',    fields:[{id:'a',  label:'Side (a)'}] },
+  rectangle: { label:'Rectangle', fields:[{id:'l',  label:'Length (l)'},{id:'w',label:'Width (w)'}] },
+  triangle:  { label:'Triangle',  fields:[{id:'a',  label:'Side a'},{id:'b',label:'Side b'},{id:'c',label:'Side c'}] },
+  sphere:    { label:'Sphere',    fields:[{id:'r',  label:'Radius (r)'}] },
+  cylinder:  { label:'Cylinder',  fields:[{id:'r',  label:'Radius (r)'},{id:'h',label:'Height (h)'}] },
+  cube:      { label:'Cube',      fields:[{id:'a',  label:'Side (a)'}] },
+  cuboid:    { label:'Cuboid',    fields:[{id:'l',  label:'Length (l)'},{id:'w',label:'Width (w)'},{id:'h',label:'Height (h)'}] },
+  cone:      { label:'Cone',      fields:[{id:'r',  label:'Radius (r)'},{id:'h',label:'Height (h)'}] },
+  rhombus:   { label:'Rhombus',   fields:[{id:'d1', label:'Diagonal d₁'},{id:'d2',label:'Diagonal d₂'}] },
+  trapezoid: { label:'Trapezoid', fields:[{id:'a',  label:'Parallel a'},{id:'b',label:'Parallel b'},{id:'h',label:'Height (h)'}] },
+  ellipse:   { label:'Ellipse',   fields:[{id:'a',  label:'Semi-axis a'},{id:'b',label:'Semi-axis b'}] },
+};
+
+let curShape='circle';
+
+function geoSelect(shape) {
+  curShape=shape;
+  document.querySelectorAll('.geo-shape-btn').forEach(b=>b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  const info=GEO_SHAPES[shape];
+  const inp=document.getElementById('geo-inputs');
+  inp.innerHTML=`<div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--accent);margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.1em">${info.label} — Measurements</div>`;
+  const grid=document.createElement('div');
+  grid.className='field-row '+(info.fields.length===1?'cols-2':info.fields.length===2?'cols-2':'cols-3');
+  info.fields.forEach(f=>{
+    const d=document.createElement('div');
+    d.innerHTML=`<label>${f.label}</label><input id="geo-${f.id}" type="number" value="5" min="0" step="any">`;
+    grid.appendChild(d);
+  });
+  inp.appendChild(grid);
+  document.getElementById('geo-results').innerHTML='';
+  document.getElementById('geo-svg-wrap').innerHTML='<div class="empty-state"><div>Enter values and calculate</div></div>';
+  hideError('geo-error');
+}
+
+function calcGeo() {
+  hideError('geo-error');
+  const v=id=>parseFloat(document.getElementById('geo-'+id)?.value)||0;
+  const PI=Math.PI;
+  let results=[], svgHtml='';
+
+  if(curShape==='circle') {
+    const r=v('r'); if(r<=0){showError('geo-error','Radius must be > 0.');return;}
+    results=[
+      {k:'Radius',v:`${r} units`},
+      {k:'Diameter',v:`${2*r} units`},
+      {k:'Area (πr²)',v:`${fmt(PI*r*r,4)} sq.units`},
+      {k:'Perimeter (2πr)',v:`${fmt(2*PI*r,4)} units`},
+      {k:'Semi-circle Area',v:`${fmt(PI*r*r/2,4)} sq.units`},
+    ];
+    svgHtml=`<svg viewBox="0 0 200 200" width="200" height="200"><circle cx="100" cy="100" r="85" fill="rgba(0,210,200,0.08)" stroke="#00d2c8" stroke-width="2"/>
+      <line x1="100" y1="100" x2="185" y2="100" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4"/>
+      <text x="142" y="95" fill="#fbbf24" font-size="13" font-family="JetBrains Mono">r</text>
+      <text x="80" y="105" fill="rgba(0,210,200,0.5)" font-size="11" font-family="JetBrains Mono">O</text></svg>`;
+  } else if(curShape==='square') {
+    const a=v('a'); if(a<=0){showError('geo-error','Side must be > 0.');return;}
+    results=[
+      {k:'Side',v:`${a} units`},
+      {k:'Area (a²)',v:`${fmt(a*a,4)} sq.units`},
+      {k:'Perimeter (4a)',v:`${fmt(4*a,4)} units`},
+      {k:'Diagonal (a√2)',v:`${fmt(a*Math.sqrt(2),4)} units`},
+    ];
+    svgHtml=`<svg viewBox="0 0 200 200" width="200" height="200"><rect x="20" y="20" width="160" height="160" fill="rgba(0,210,200,0.08)" stroke="#00d2c8" stroke-width="2"/>
+      <text x="100" y="200" fill="#fbbf24" font-size="13" font-family="JetBrains Mono" text-anchor="middle">a = ${a}</text>
+      <line x1="20" y1="195" x2="180" y2="195" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#ar)"/></svg>`;
+  } else if(curShape==='rectangle') {
+    const l=v('l'),w=v('w'); if(l<=0||w<=0){showError('geo-error','Length and width must be > 0.');return;}
+    results=[
+      {k:'Area (l×w)',v:`${fmt(l*w,4)} sq.units`},
+      {k:'Perimeter (2(l+w))',v:`${fmt(2*(l+w),4)} units`},
+      {k:'Diagonal',v:`${fmt(Math.sqrt(l*l+w*w),4)} units`},
+    ];
+    const rx=160/(l>w?1:l/w), ry=120/(w>l?1:w/l);
+    svgHtml=`<svg viewBox="0 0 220 180" width="220" height="180"><rect x="20" y="20" width="180" height="140" fill="rgba(0,210,200,0.08)" stroke="#00d2c8" stroke-width="2"/>
+      <text x="110" y="170" fill="#fbbf24" font-size="12" font-family="JetBrains Mono" text-anchor="middle">l = ${l}</text>
+      <text x="5" y="95" fill="#a78bfa" font-size="12" font-family="JetBrains Mono" text-anchor="middle">w=${w}</text></svg>`;
+  } else if(curShape==='triangle') {
+    const a=v('a'),b=v('b'),c=v('c');
+    if(a<=0||b<=0||c<=0){showError('geo-error','All sides must be > 0.');return;}
+    if(a+b<=c||a+c<=b||b+c<=a){showError('geo-error','Invalid triangle — triangle inequality violated.');return;}
+    const s=(a+b+c)/2;
+    const area=Math.sqrt(s*(s-a)*(s-b)*(s-c));
+    results=[
+      {k:'Perimeter (a+b+c)',v:`${fmt(a+b+c,4)} units`},
+      {k:'Semi-perimeter (s)',v:`${fmt(s,4)} units`},
+      {k:'Area (Heron\'s)',v:`${fmt(area,4)} sq.units`},
+      {k:'Height (h=2A/a)',v:`${fmt(2*area/a,4)} units`},
+      {k:'Inradius (r=A/s)',v:`${fmt(area/s,4)} units`},
+    ];
+    svgHtml=`<svg viewBox="0 0 200 200" width="200" height="200"><polygon points="100,15 185,175 15,175" fill="rgba(0,210,200,0.08)" stroke="#00d2c8" stroke-width="2"/>
+      <text x="100" y="195" fill="#fbbf24" font-size="11" font-family="JetBrains Mono" text-anchor="middle">a,b,c = ${a},${b},${c}</text></svg>`;
+  } else if(curShape==='sphere') {
+    const r=v('r'); if(r<=0){showError('geo-error','Radius must be > 0.');return;}
+    results=[
+      {k:'Radius',v:`${r} units`},
+      {k:'Volume (4πr³/3)',v:`${fmt(4*PI*r*r*r/3,4)} cu.units`},
+      {k:'Surface Area (4πr²)',v:`${fmt(4*PI*r*r,4)} sq.units`},
+      {k:'Great Circle Area',v:`${fmt(PI*r*r,4)} sq.units`},
+    ];
+    svgHtml=`<svg viewBox="0 0 200 200" width="200" height="200">
+      <defs><radialGradient id="sg" cx="40%" cy="35%"><stop offset="0%" stop-color="rgba(0,210,200,0.4)"/>
+      <stop offset="100%" stop-color="rgba(0,210,200,0.05)"/></radialGradient></defs>
+      <circle cx="100" cy="100" r="80" fill="url(#sg)" stroke="#00d2c8" stroke-width="2"/>
+      <ellipse cx="100" cy="100" rx="80" ry="25" fill="none" stroke="rgba(0,210,200,0.35)" stroke-width="1.5" stroke-dasharray="4"/>
+      <text x="100" y="175" fill="#fbbf24" font-size="12" font-family="JetBrains Mono" text-anchor="middle">r = ${r}</text></svg>`;
+  } else if(curShape==='cylinder') {
+    const r=v('r'),h=v('h'); if(r<=0||h<=0){showError('geo-error','Radius and height must be > 0.');return;}
+    results=[
+      {k:'Volume (πr²h)',v:`${fmt(PI*r*r*h,4)} cu.units`},
+      {k:'Curved Surface (2πrh)',v:`${fmt(2*PI*r*h,4)} sq.units`},
+      {k:'Total Surface (2πr(r+h))',v:`${fmt(2*PI*r*(r+h),4)} sq.units`},
+      {k:'Base Area (πr²)',v:`${fmt(PI*r*r,4)} sq.units`},
+    ];
+    svgHtml=`<svg viewBox="0 0 200 220" width="200" height="220">
+      <ellipse cx="100" cy="50" rx="70" ry="20" fill="rgba(0,210,200,0.15)" stroke="#00d2c8" stroke-width="2"/>
+      <rect x="30" y="50" width="140" height="140" fill="rgba(0,210,200,0.07)" stroke="none"/>
+      <line x1="30" y1="50" x2="30" y2="190" stroke="#00d2c8" stroke-width="2"/>
+      <line x1="170" y1="50" x2="170" y2="190" stroke="#00d2c8" stroke-width="2"/>
+      <ellipse cx="100" cy="190" rx="70" ry="20" fill="rgba(0,210,200,0.1)" stroke="#00d2c8" stroke-width="2"/>
+      <text x="100" y="215" fill="#fbbf24" font-size="11" font-family="JetBrains Mono" text-anchor="middle">r=${r}, h=${h}</text></svg>`;
+  } else if(curShape==='cube') {
+    const a=v('a'); if(a<=0){showError('geo-error','Side must be > 0.');return;}
+    results=[
+      {k:'Side',v:`${a} units`},
+      {k:'Volume (a³)',v:`${fmt(a*a*a,4)} cu.units`},
+      {k:'Surface Area (6a²)',v:`${fmt(6*a*a,4)} sq.units`},
+      {k:'Diagonal (a√3)',v:`${fmt(a*Math.sqrt(3),4)} units`},
+      {k:'Face Diagonal (a√2)',v:`${fmt(a*Math.sqrt(2),4)} units`},
+    ];
+    svgHtml=`<svg viewBox="0 0 200 200" width="200" height="200">
+      <polygon points="40,60 140,60 140,160 40,160" fill="rgba(0,210,200,0.08)" stroke="#00d2c8" stroke-width="2"/>
+      <polygon points="40,60 80,20 180,20 140,60" fill="rgba(0,210,200,0.06)" stroke="#00d2c8" stroke-width="2"/>
+      <polygon points="140,60 180,20 180,120 140,160" fill="rgba(0,210,200,0.05)" stroke="#00d2c8" stroke-width="2"/>
+      <text x="100" y="195" fill="#fbbf24" font-size="12" font-family="JetBrains Mono" text-anchor="middle">a = ${a}</text></svg>`;
+  } else if(curShape==='cuboid') {
+    const l=v('l'),w=v('w'),h=v('h'); if(l<=0||w<=0||h<=0){showError('geo-error','All dimensions must be > 0.');return;}
+    results=[
+      {k:'Volume (l×w×h)',v:`${fmt(l*w*h,4)} cu.units`},
+      {k:'Surface Area',v:`${fmt(2*(l*w+w*h+l*h),4)} sq.units`},
+      {k:'Diagonal',v:`${fmt(Math.sqrt(l*l+w*w+h*h),4)} units`},
+    ];
+    svgHtml=`<svg viewBox="0 0 200 200" width="200" height="200">
+      <polygon points="20,80 120,80 120,180 20,180" fill="rgba(0,210,200,0.08)" stroke="#00d2c8" stroke-width="2"/>
+      <polygon points="20,80 60,40 160,40 120,80" fill="rgba(0,210,200,0.06)" stroke="#00d2c8" stroke-width="2"/>
+      <polygon points="120,80 160,40 160,140 120,180" fill="rgba(0,210,200,0.05)" stroke="#00d2c8" stroke-width="2"/>
+      <text x="100" y="198" fill="#fbbf24" font-size="10" font-family="JetBrains Mono" text-anchor="middle">l=${l} w=${w} h=${h}</text></svg>`;
+  } else if(curShape==='cone') {
+    const r=v('r'),h=v('h'); if(r<=0||h<=0){showError('geo-error','Radius and height must be > 0.');return;}
+    const l=Math.sqrt(r*r+h*h);
+    results=[
+      {k:'Slant Height (l)',v:`${fmt(l,4)} units`},
+      {k:'Volume (πr²h/3)',v:`${fmt(PI*r*r*h/3,4)} cu.units`},
+      {k:'Curved Surface (πrl)',v:`${fmt(PI*r*l,4)} sq.units`},
+      {k:'Total Surface (πr(r+l))',v:`${fmt(PI*r*(r+l),4)} sq.units`},
+    ];
+    svgHtml=`<svg viewBox="0 0 200 200" width="200" height="200">
+      <polygon points="100,20 30,180 170,180" fill="rgba(0,210,200,0.08)" stroke="#00d2c8" stroke-width="2"/>
+      <ellipse cx="100" cy="180" rx="70" ry="18" fill="rgba(0,210,200,0.1)" stroke="#00d2c8" stroke-width="2"/>
+      <text x="100" y="200" fill="#fbbf24" font-size="11" font-family="JetBrains Mono" text-anchor="middle">r=${r}, h=${h}</text></svg>`;
+  } else if(curShape==='rhombus') {
+    const d1=v('d1'),d2=v('d2'); if(d1<=0||d2<=0){showError('geo-error','Diagonals must be > 0.');return;}
+    const side=Math.sqrt((d1/2)**2+(d2/2)**2);
+    results=[
+      {k:'Area (d₁×d₂/2)',v:`${fmt(d1*d2/2,4)} sq.units`},
+      {k:'Side',v:`${fmt(side,4)} units`},
+      {k:'Perimeter (4×side)',v:`${fmt(4*side,4)} units`},
+    ];
+    svgHtml=`<svg viewBox="0 0 200 200" width="200" height="200">
+      <polygon points="100,20 180,100 100,180 20,100" fill="rgba(0,210,200,0.08)" stroke="#00d2c8" stroke-width="2"/>
+      <line x1="20" y1="100" x2="180" y2="100" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4"/>
+      <line x1="100" y1="20" x2="100" y2="180" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4"/>
+      <text x="100" y="200" fill="#fbbf24" font-size="11" font-family="JetBrains Mono" text-anchor="middle">d₁=${d1}, d₂=${d2}</text></svg>`;
+  } else if(curShape==='trapezoid') {
+    const a=v('a'),b=v('b'),h=v('h'); if(h<=0){showError('geo-error','Height must be > 0.');return;}
+    results=[
+      {k:'Area ((a+b)×h/2)',v:`${fmt((a+b)*h/2,4)} sq.units`},
+      {k:'Parallel sides',v:`${a}, ${b} units`},
+      {k:'Height',v:`${h} units`},
+    ];
+    svgHtml=`<svg viewBox="0 0 200 180" width="200" height="180">
+      <polygon points="40,20 160,20 180,160 20,160" fill="rgba(0,210,200,0.08)" stroke="#00d2c8" stroke-width="2"/>
+      <text x="100" y="175" fill="#fbbf24" font-size="11" font-family="JetBrains Mono" text-anchor="middle">a=${a}, b=${b}, h=${h}</text></svg>`;
+  } else if(curShape==='ellipse') {
+    const a=v('a'),b=v('b'); if(a<=0||b<=0){showError('geo-error','Semi-axes must be > 0.');return;}
+    const e=Math.sqrt(1-(Math.min(a,b)/Math.max(a,b))**2);
+    results=[
+      {k:'Area (πab)',v:`${fmt(PI*a*b,4)} sq.units`},
+      {k:'Eccentricity',v:`${fmt(e,4)}`},
+      {k:'Approx. Perimeter',v:`${fmt(PI*(3*(a+b)-Math.sqrt((3*a+b)*(a+3*b))),4)} units`},
+    ];
+    svgHtml=`<svg viewBox="0 0 200 160" width="200" height="160">
+      <ellipse cx="100" cy="80" rx="90" ry="60" fill="rgba(0,210,200,0.08)" stroke="#00d2c8" stroke-width="2"/>
+      <line x1="100" y1="80" x2="190" y2="80" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4"/>
+      <line x1="100" y1="80" x2="100" y2="20" stroke="#a78bfa" stroke-width="1.5" stroke-dasharray="4"/>
+      <text x="100" y="155" fill="#fbbf24" font-size="11" font-family="JetBrains Mono" text-anchor="middle">a=${a}, b=${b}</text></svg>`;
+  }
+
+  document.getElementById('geo-svg-wrap').innerHTML = svgHtml || '<div class="empty-state"><div>No preview</div></div>';
+  document.getElementById('geo-results').innerHTML = results.map(r=>
+    `<div class="geo-result-row"><span class="k">${r.k}</span><span class="v">${r.v}</span></div>`
+  ).join('');
+}
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+function initExtras() {
+  buildEq3Rows();
+  buildNthInputs();
+  geoSelect('circle');
+  // [CENTURATOR-AI ADD] Dynamic footer year
+  const fy = document.getElementById('footer-year');
+  if(fy) fy.textContent = new Date().getFullYear();
+  // [CENTURATOR-AI ADD] Back to top button visibility
+  window.addEventListener('scroll', () => {
+    const bt = document.getElementById('backTop');
+    if(bt) bt.classList.toggle('visible', window.scrollY > 300);
+  });
+  // [CENTURATOR-AI ADD] Enter key triggers calculate
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && !e.shiftKey) {
+      const activePanel = document.querySelector('.tool-panel.active');
+      if(activePanel) {
+        const calcBtn = activePanel.querySelector('.btn-primary');
+        if(calcBtn && document.activeElement.tagName !== 'BUTTON') calcBtn.click();
+      }
+    }
+  });
+  // [CENTURATOR-AI ADD] Resize observer for all visible canvases
+  window.addEventListener('resize', redrawAllVisibleCanvases);
+  // Draw initial trig unit circle
+  setTimeout(drawTrigUnitCircle, 100);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  onMethodChange();
+  createMatrixInput();
+  const defaults = [[2,-1,0],[-1,2,-1],[0,-1,2]];
+  const sz = 3;
+  for (let i = 0; i < sz; i++)
+    for (let j = 0; j < sz; j++)
+      matInputs[i*sz+j].value = defaults[i][j];
+  switchTool(0);
+  initExtras();
+});
+// ══════════════════════════════════════════════
+//  [CENTURATOR-AI ADD] THEME TOGGLE
+// ══════════════════════════════════════════════
+function toggleTheme() {
+  document.body.classList.toggle('light-mode');
+  localStorage.setItem('centurator-theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+}
+(function() {
+  if(localStorage.getItem('centurator-theme') === 'light') document.body.classList.add('light-mode');
+})();
+
+// ══════════════════════════════════════════════
+//  [CENTURATOR-AI ADD] RESIZE REDRAW
+// ══════════════════════════════════════════════
+function redrawAllVisibleCanvases() {
+  const active = document.querySelector('.tool-panel.active');
+  if(!active) return;
+  // Redraw eq2 graph if visible
+  const eq2c = active.querySelector('#eq2-canvas');
+  if(eq2c && eq2c.offsetParent) {
+    const a1=+document.getElementById('e2-a1')?.value, b1=+document.getElementById('e2-b1')?.value, c1=+document.getElementById('e2-c1')?.value;
+    const a2=+document.getElementById('e2-a2')?.value, b2=+document.getElementById('e2-b2')?.value, c2=+document.getElementById('e2-c2')?.value;
+    const D=a1*b2-a2*b1;
+    if(Math.abs(D)>1e-12) { const x=(c1*b2-c2*b1)/D, y=(a1*c2-a2*c1)/D; drawEq2Graph(a1,b1,c1,a2,b2,c2,x,y); }
+  }
+  // Redraw trig circle
+  const trigC = active.querySelector('#trig-canvas');
+  if(trigC) drawTrigUnitCircle();
+}
+
+// ══════════════════════════════════════════════
+//  [CENTURATOR-AI ADD] TRIGONOMETRY MODULE
+// ══════════════════════════════════════════════
+function trigSwitchMode(n) {
+  for(let i=0;i<3;i++){
+    document.getElementById('trig-panel-'+i)?.classList.remove('active');
+    document.getElementById('trig-tab-'+i)?.classList.remove('active');
+  }
+  document.getElementById('trig-panel-'+n)?.classList.add('active');
+  document.getElementById('trig-tab-'+n)?.classList.add('active');
+}
+
+function calcTrig() {
+  const angle = parseFloat(document.getElementById('trig-angle').value);
+  const unit = document.getElementById('trig-unit').value;
+  if(isNaN(angle)) { showError('trig-error','Enter a valid angle.'); return; }
+  hideError('trig-error');
+  const rad = unit === 'deg' ? angle * Math.PI / 180 : angle;
+  const sinV = Math.sin(rad), cosV = Math.cos(rad), tanV = Math.tan(rad);
+  const secV = 1/cosV, cosecV = 1/sinV, cotV = 1/tanV;
+  const clamp = v => (isFinite(v) ? fmt(v,6) : '∞');
+  const rows = [
+    ['sin θ', clamp(sinV),'var(--accent)'],
+    ['cos θ', clamp(cosV),'var(--accent)'],
+    ['tan θ', clamp(tanV),'var(--accent2)'],
+    ['sec θ (1/cos)', clamp(secV),'var(--accent3)'],
+    ['cosec θ (1/sin)', clamp(cosecV),'var(--accent3)'],
+    ['cot θ (1/tan)', clamp(cotV),'var(--accent3)'],
+    ['sin²θ + cos²θ', fmt(sinV*sinV+cosV*cosV,4),'var(--success)'],
+  ];
+  document.getElementById('trig-results-area').innerHTML = `
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-bottom:0.75rem">
+      θ = ${angle}${unit==='deg'?'°':' rad'} = ${fmt(rad,5)} rad = ${fmt(angle*(unit==='rad'?180/Math.PI:1),4)}°
+    </div>
+    ${rows.map(([k,v,c])=>`<div class="geo-result-row" style="margin-bottom:0.4rem"><span class="k">${k}</span><span class="v" style="color:${c}">${v}</span></div>`).join('')}
+  `;
+  drawTrigUnitCircle(rad, sinV, cosV);
+}
+
+function calcInvTrig() {
+  const val = parseFloat(document.getElementById('inv-val').value);
+  if(isNaN(val)) { showError('inv-error','Enter a valid value.'); return; }
+  hideError('inv-error');
+  const rows = [];
+  if(val>=-1&&val<=1) {
+    rows.push(['arcsin (degrees)', fmt(Math.asin(val)*180/Math.PI,6)+'°', 'var(--accent)']);
+    rows.push(['arccos (degrees)', fmt(Math.acos(val)*180/Math.PI,6)+'°', 'var(--accent)']);
+    rows.push(['arcsin (radians)', fmt(Math.asin(val),6)+' rad', 'var(--accent2)']);
+    rows.push(['arccos (radians)', fmt(Math.acos(val),6)+' rad', 'var(--accent2)']);
+  } else {
+    rows.push(['arcsin/arccos', 'Undefined (|val|>1)', 'var(--danger)']);
+  }
+  rows.push(['arctan (degrees)', fmt(Math.atan(val)*180/Math.PI,6)+'°', 'var(--accent3)']);
+  rows.push(['arctan (radians)', fmt(Math.atan(val),6)+' rad', 'var(--accent3)']);
+  document.getElementById('trig-results-area').innerHTML =
+    rows.map(([k,v,c])=>`<div class="geo-result-row" style="margin-bottom:0.4rem"><span class="k">${k}</span><span class="v" style="color:${c}">${v}</span></div>`).join('');
+}
+
+function calcCompound() {
+  const A = parseFloat(document.getElementById('cpd-a').value) * Math.PI / 180;
+  const B = parseFloat(document.getElementById('cpd-b').value) * Math.PI / 180;
+  const ad = parseFloat(document.getElementById('cpd-a').value);
+  const bd = parseFloat(document.getElementById('cpd-b').value);
+  const rows = [
+    [`sin(${ad}°+${bd}°)`, fmt(Math.sin(A+B),6)],
+    [`sin(${ad}°−${bd}°)`, fmt(Math.sin(A-B),6)],
+    [`cos(${ad}°+${bd}°)`, fmt(Math.cos(A+B),6)],
+    [`cos(${ad}°−${bd}°)`, fmt(Math.cos(A-B),6)],
+    [`tan(${ad}°+${bd}°)`, fmt(Math.tan(A+B),6)],
+    [`tan(${ad}°−${bd}°)`, fmt(Math.tan(A-B),6)],
+    [`sin(2×${ad}°)`, fmt(Math.sin(2*A),6)],
+    [`cos(2×${ad}°)`, fmt(Math.cos(2*A),6)],
+  ];
+  document.getElementById('trig-results-area').innerHTML =
+    rows.map(([k,v])=>`<div class="geo-result-row" style="margin-bottom:0.4rem"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+}
+
+function drawTrigUnitCircle(rad=0, sinV=0, cosV=1) {
+  const canvas = document.getElementById('trig-canvas');
+  if(!canvas) return;
+  const W=canvas.width=260, H=canvas.height=260;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  const cx=W/2, cy=H/2, r=100;
+  // Grid
+  ctx.strokeStyle='rgba(0,210,200,0.08)'; ctx.lineWidth=1;
+  for(let i=-2;i<=2;i++) {
+    ctx.beginPath(); ctx.moveTo(cx+i*50,0); ctx.lineTo(cx+i*50,H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,cy+i*50); ctx.lineTo(W,cy+i*50); ctx.stroke();
+  }
+  // Axes
+  ctx.strokeStyle='rgba(0,210,200,0.3)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(W,cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx,0); ctx.lineTo(cx,H); ctx.stroke();
+  // Unit circle
+  ctx.strokeStyle='rgba(0,210,200,0.5)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+  // Angle point
+  const px = cx + r*cosV, py = cy - r*sinV;
+  ctx.strokeStyle='#fbbf24'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(px,py); ctx.stroke();
+  // sin/cos lines
+  ctx.strokeStyle='rgba(167,139,250,0.7)'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]);
+  ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px,cy); ctx.stroke();
+  ctx.strokeStyle='rgba(0,210,200,0.7)';
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(px,cy); ctx.stroke();
+  ctx.setLineDash([]);
+  // Arc
+  ctx.strokeStyle='rgba(251,191,36,0.4)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(cx,cy,30,0,-rad,rad<0); ctx.stroke();
+  // Dot
+  ctx.fillStyle='#fbbf24'; ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2); ctx.fill();
+  // Labels
+  ctx.font='10px JetBrains Mono,monospace'; ctx.fillStyle='rgba(74,122,155,0.9)'; ctx.textAlign='center';
+  ctx.fillText('1',cx+r+12,cy+4); ctx.fillText('-1',cx-r-12,cy+4);
+  ctx.fillText('1',cx+4,cy-r-6); ctx.fillText('-1',cx+4,cy+r+12);
+  ctx.fillStyle='#fbbf24'; ctx.font='bold 10px JetBrains Mono,monospace';
+  ctx.fillText(`θ=${fmt(rad,3)}`,cx+35,cy-8);
+  ctx.fillStyle='#a78bfa'; ctx.textAlign='center';
+  ctx.fillText(`sin=${fmt(sinV,3)}`,px,py<cy?py-10:py+14);
+  ctx.fillStyle='#00d2c8';
+  ctx.fillText(`cos=${fmt(cosV,3)}`,cx+(px-cx)/2,cy+14);
+}
+
+// ══════════════════════════════════════════════
+//  [CENTURATOR-AI ADD] STATISTICS MODULE
+// ══════════════════════════════════════════════
+function statsSwitchMode(n) {
+  for(let i=0;i<2;i++){
+    document.getElementById('stats-panel-'+i)?.classList.remove('active');
+    document.getElementById('stats-tab-'+i)?.classList.remove('active');
+  }
+  document.getElementById('stats-panel-'+n)?.classList.add('active');
+  document.getElementById('stats-tab-'+n)?.classList.add('active');
+}
+
+function statsSample(n) {
+  const s = ['4, 7, 13, 2, 8, 9, 4, 7, 4', '10, 20, 30, 40, 50, 30, 20, 10'][n-1];
+  document.getElementById('stats-data').value = s;
+  calcStats();
+}
+
+function calcStats() {
+  hideError('stats-error');
+  const raw = document.getElementById('stats-data').value;
+  const data = raw.split(',').map(s=>parseFloat(s.trim())).filter(v=>!isNaN(v));
+  if(data.length < 2) { showError('stats-error','Enter at least 2 valid numbers.'); return; }
+  const n = data.length;
+  const sorted = [...data].sort((a,b)=>a-b);
+  const mean = data.reduce((s,v)=>s+v,0)/n;
+  const median = n%2===0 ? (sorted[n/2-1]+sorted[n/2])/2 : sorted[Math.floor(n/2)];
+  // Mode
+  const freq={};
+  data.forEach(v=>{ freq[v]=(freq[v]||0)+1; });
+  const maxFreq = Math.max(...Object.values(freq));
+  const modes = Object.keys(freq).filter(k=>freq[k]===maxFreq).map(Number);
+  const variance = data.reduce((s,v)=>s+(v-mean)**2,0)/n;
+  const sd = Math.sqrt(variance);
+  const min=sorted[0], max=sorted[n-1], range=max-min;
+  const q1=sorted[Math.floor(n/4)], q3=sorted[Math.floor(3*n/4)];
+  const rows = [
+    ['Count (n)',n,'var(--text)'],
+    ['Mean (x̄)',fmt(mean,4),'var(--accent)'],
+    ['Median',fmt(median,4),'var(--accent)'],
+    ['Mode',modes.join(', '),'var(--accent2)'],
+    ['Variance (σ²)',fmt(variance,4),'var(--accent3)'],
+    ['Std Dev (σ)',fmt(sd,4),'var(--accent3)'],
+    ['Min',fmt(min,4),'var(--text-dim)'],
+    ['Max',fmt(max,4),'var(--text-dim)'],
+    ['Range',fmt(range,4),'var(--text-dim)'],
+    ['Q1 (25th %ile)',fmt(q1,4),'var(--text-dim)'],
+    ['Q3 (75th %ile)',fmt(q3,4),'var(--text-dim)'],
+  ];
+  document.getElementById('stats-results-area').innerHTML =
+    rows.map(([k,v,c])=>`<div class="geo-result-row" style="margin-bottom:0.35rem"><span class="k">${k}</span><span class="v" style="color:${c}">${v}</span></div>`).join('');
+  drawBarChart(data);
+}
+
+function drawBarChart(data) {
+  const canvas = document.getElementById('stats-canvas');
+  if(!canvas) return;
+  canvas.width = canvas.offsetWidth || 500;
+  const W=canvas.width, H=canvas.height=200;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  const pad=30, n=data.length;
+  const maxV=Math.max(...data), minV=Math.min(...data,0);
+  const range=maxV-minV||1;
+  const bw=(W-2*pad)/n-2;
+  const toY=v=>H-pad-(v-minV)/range*(H-2*pad);
+  // Grid
+  ctx.strokeStyle='rgba(0,210,200,0.07)'; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad+i*(H-2*pad)/4;
+    ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(W-pad,y); ctx.stroke();
+  }
+  // Baseline
+  ctx.strokeStyle='rgba(0,210,200,0.3)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(pad,toY(0)); ctx.lineTo(W-pad,toY(0)); ctx.stroke();
+  // Bars
+  data.forEach((v,i)=>{
+    const x=pad+i*((W-2*pad)/n)+1;
+    const barH=Math.abs(v/range*(H-2*pad));
+    const y=v>=0?toY(v):toY(0);
+    const grad=ctx.createLinearGradient(0,y,0,y+barH);
+    grad.addColorStop(0,'rgba(0,210,200,0.8)');
+    grad.addColorStop(1,'rgba(0,210,200,0.2)');
+    ctx.fillStyle=grad;
+    ctx.fillRect(x,y,bw,barH);
+    ctx.fillStyle='rgba(0,210,200,0.5)';
+    ctx.font='8px JetBrains Mono,monospace'; ctx.textAlign='center';
+    ctx.fillText(v,x+bw/2,v>=0?y-3:y+barH+10);
+  });
+}
+
+function calcCorrelation() {
+  hideError('corr-error');
+  const xd=document.getElementById('corr-x').value.split(',').map(s=>parseFloat(s.trim())).filter(v=>!isNaN(v));
+  const yd=document.getElementById('corr-y').value.split(',').map(s=>parseFloat(s.trim())).filter(v=>!isNaN(v));
+  if(xd.length<2||yd.length<2) { showError('corr-error','Enter at least 2 values in each dataset.'); return; }
+  if(xd.length!==yd.length) { showError('corr-error','Both datasets must have equal number of values.'); return; }
+  const n=xd.length;
+  const mx=xd.reduce((s,v)=>s+v,0)/n, my=yd.reduce((s,v)=>s+v,0)/n;
+  const num=xd.reduce((s,v,i)=>s+(v-mx)*(yd[i]-my),0);
+  const dx=Math.sqrt(xd.reduce((s,v)=>s+(v-mx)**2,0));
+  const dy=Math.sqrt(yd.reduce((s,v)=>s+(v-my)**2,0));
+  const r=(dx>0&&dy>0)?num/(dx*dy):0;
+  const interp=Math.abs(r)>0.9?'Very strong':Math.abs(r)>0.7?'Strong':Math.abs(r)>0.5?'Moderate':Math.abs(r)>0.3?'Weak':'Very weak';
+  const dir=r>0?'positive':'negative';
+  document.getElementById('stats-results-area').innerHTML = `
+    <div class="result-box result-yellow" style="margin-bottom:1rem">
+      <div class="result-label">Pearson Correlation Coefficient r</div>
+      <div class="result-value">${fmt(r,6)}</div>
+      <div class="result-sub">${interp} ${dir} correlation</div>
+    </div>
+    <div class="geo-result-row"><span class="k">Mean X</span><span class="v">${fmt(mx,4)}</span></div>
+    <div class="geo-result-row"><span class="k">Mean Y</span><span class="v">${fmt(my,4)}</span></div>
+    <div class="geo-result-row"><span class="k">n (pairs)</span><span class="v">${n}</span></div>
+  `;
+}
+
+// ══════════════════════════════════════════════
+//  [CENTURATOR-AI ADD] COORDINATE GEOMETRY MODULE
+// ══════════════════════════════════════════════
+function cgSwitchMode(n) {
+  for(let i=0;i<3;i++){
+    document.getElementById('cg-panel-'+i)?.classList.remove('active');
+    document.getElementById('cg-tab-'+i)?.classList.remove('active');
+  }
+  document.getElementById('cg-panel-'+n)?.classList.add('active');
+  document.getElementById('cg-tab-'+n)?.classList.add('active');
+}
+
+function calcCG() {
+  hideError('cg-error');
+  const x1=parseFloat(document.getElementById('cg-x1').value), y1=parseFloat(document.getElementById('cg-y1').value);
+  const x2=parseFloat(document.getElementById('cg-x2').value), y2=parseFloat(document.getElementById('cg-y2').value);
+  if([x1,y1,x2,y2].some(isNaN)) { showError('cg-error','Enter valid coordinates.'); return; }
+  const dist=Math.sqrt((x2-x1)**2+(y2-y1)**2);
+  const mx=(x1+x2)/2, my=(y1+y2)/2;
+  const slope=x2!==x1?(y2-y1)/(x2-x1):Infinity;
+  const slopeStr=isFinite(slope)?fmt(slope,4):'∞ (vertical)';
+  let lineEq='';
+  if(isFinite(slope)) {
+    const c=y1-slope*x1;
+    lineEq=`y = ${fmt(slope,3)}x ${c>=0?'+':''} ${fmt(c,3)}`;
+  } else { lineEq=`x = ${x1} (vertical line)`; }
+  const rows=[
+    ['Distance AB',fmt(dist,4)+' units'],
+    ['Midpoint M',(fmt(mx,4)+', '+fmt(my,4))],
+    ['Slope (m)',(slopeStr)],
+    ['Line Equation',(lineEq)],
+    ['A(x₁,y₁)',(x1+', '+y1)],
+    ['B(x₂,y₂)',(x2+', '+y2)],
+  ];
+  document.getElementById('cg-results-area').innerHTML =
+    rows.map(([k,v])=>`<div class="cg-result-row"><span class="ck">${k}</span><span class="cv">${v}</span></div>`).join('');
+  drawCGCanvas(x1,y1,x2,y2,mx,my);
+}
+
+function drawCGCanvas(x1,y1,x2,y2,mx,my) {
+  const canvas=document.getElementById('cg-canvas');
+  if(!canvas) return;
+  canvas.width=canvas.offsetWidth||500;
+  const W=canvas.width, H=canvas.height=260;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  const allX=[x1,x2,0], allY=[y1,y2,0];
+  const pad=45;
+  const xMin=Math.min(...allX)-2, xMax=Math.max(...allX)+2;
+  const yMin=Math.min(...allY)-2, yMax=Math.max(...allY)+2;
+  const xR=xMax-xMin||1, yR=yMax-yMin||1;
+  const toX=x=>pad+(x-xMin)/xR*(W-2*pad);
+  const toY=y=>H-pad-(y-yMin)/yR*(H-2*pad);
+  // Grid
+  ctx.strokeStyle='rgba(0,210,200,0.06)'; ctx.lineWidth=1;
+  for(let gx=Math.ceil(xMin);gx<=Math.floor(xMax);gx++){ctx.beginPath();ctx.moveTo(toX(gx),pad);ctx.lineTo(toX(gx),H-pad);ctx.stroke();}
+  for(let gy=Math.ceil(yMin);gy<=Math.floor(yMax);gy++){ctx.beginPath();ctx.moveTo(pad,toY(gy));ctx.lineTo(W-pad,toY(gy));ctx.stroke();}
+  // Axes
+  ctx.strokeStyle='rgba(0,210,200,0.3)'; ctx.lineWidth=1.5;
+  if(yMin<=0&&yMax>=0){ctx.beginPath();ctx.moveTo(pad,toY(0));ctx.lineTo(W-pad,toY(0));ctx.stroke();}
+  if(xMin<=0&&xMax>=0){ctx.beginPath();ctx.moveTo(toX(0),pad);ctx.lineTo(toX(0),H-pad);ctx.stroke();}
+  // Line AB
+  ctx.strokeStyle='rgba(0,210,200,0.8)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(toX(x1),toY(y1)); ctx.lineTo(toX(x2),toY(y2)); ctx.stroke();
+  // Points
+  [[x1,y1,'#00d2c8','A'],[x2,y2,'#fbbf24','B'],[mx,my,'#a78bfa','M']].forEach(([x,y,c,lbl])=>{
+    ctx.fillStyle=c; ctx.beginPath(); ctx.arc(toX(x),toY(y),5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=c; ctx.font='bold 10px JetBrains Mono,monospace'; ctx.textAlign='center';
+    ctx.fillText(`${lbl}(${x},${y})`,toX(x),toY(y)-10);
+  });
+}
+
+function calcSection() {
+  const x1=parseFloat(document.getElementById('sec-x1').value), y1=parseFloat(document.getElementById('sec-y1').value);
+  const x2=parseFloat(document.getElementById('sec-x2').value), y2=parseFloat(document.getElementById('sec-y2').value);
+  const m=parseFloat(document.getElementById('sec-m').value), n=parseFloat(document.getElementById('sec-n').value);
+  const type=document.getElementById('sec-type').value;
+  let px,py;
+  if(type==='internal') { px=(m*x2+n*x1)/(m+n); py=(m*y2+n*y1)/(m+n); }
+  else { px=(m*x2-n*x1)/(m-n); py=(m*y2-n*y1)/(m-n); }
+  document.getElementById('cg-results-area').innerHTML =
+    `<div class="result-box" style="margin-bottom:1rem"><div class="result-label">Section Point P (${type})</div>
+     <div class="result-value" style="font-size:1.4rem">(${fmt(px,4)}, ${fmt(py,4)})</div>
+     <div class="result-sub">Divides AB in ratio ${m}:${n} (${type})</div></div>
+     <div class="cg-result-row"><span class="ck">A(x₁,y₁)</span><span class="cv">${x1}, ${y1}</span></div>
+     <div class="cg-result-row"><span class="ck">B(x₂,y₂)</span><span class="cv">${x2}, ${y2}</span></div>
+     <div class="cg-result-row"><span class="ck">Ratio m:n</span><span class="cv">${m}:${n}</span></div>`;
+}
+
+function calcPtLine() {
+  const x0=parseFloat(document.getElementById('ptl-x0').value), y0=parseFloat(document.getElementById('ptl-y0').value);
+  const a=parseFloat(document.getElementById('ptl-a').value), b=parseFloat(document.getElementById('ptl-b').value), c=parseFloat(document.getElementById('ptl-c').value);
+  if([x0,y0,a,b,c].some(isNaN)) return;
+  const denom=Math.sqrt(a*a+b*b);
+  if(denom<1e-12) { document.getElementById('cg-results-area').innerHTML='<div class="alert alert-danger">Line coefficients a and b cannot both be zero.</div>'; return; }
+  const dist=Math.abs(a*x0+b*y0+c)/denom;
+  document.getElementById('cg-results-area').innerHTML =
+    `<div class="result-box result-yellow"><div class="result-label">Distance from Point to Line</div>
+     <div class="result-value">${fmt(dist,6)}</div>
+     <div class="result-sub">d = |ax₀+by₀+c| / √(a²+b²)</div></div>
+     <div class="cg-result-row" style="margin-top:0.75rem"><span class="ck">Point (${x0}, ${y0})</span><span class="cv">—</span></div>
+     <div class="cg-result-row"><span class="ck">Line: ${a}x ${b>=0?'+':''}${b}y ${c>=0?'+':''}${c} = 0</span><span class="cv">—</span></div>`;
+}
+
+// ══════════════════════════════════════════════
+//  [CENTURATOR-AI ADD] AP/GP MODULE
+// ══════════════════════════════════════════════
+function progSwitchMode(n) {
+  for(let i=0;i<3;i++){
+    document.getElementById('prog-panel-'+i)?.classList.remove('active');
+    document.getElementById('prog-tab-'+i)?.classList.remove('active');
+  }
+  document.getElementById('prog-panel-'+n)?.classList.add('active');
+  document.getElementById('prog-tab-'+n)?.classList.add('active');
+}
+
+function calcAP() {
+  hideError('ap-error');
+  const a=parseFloat(document.getElementById('ap-a').value);
+  const d=parseFloat(document.getElementById('ap-d').value);
+  const n=parseInt(document.getElementById('ap-n').value);
+  if(isNaN(a)||isNaN(d)||isNaN(n)||n<1) { showError('ap-error','Enter valid values. n must be ≥ 1.'); return; }
+  const an=a+(n-1)*d;
+  const sn=n/2*(2*a+(n-1)*d);
+  const terms=Array.from({length:Math.min(n,15)},(_,i)=>fmt(a+i*d,3));
+  document.getElementById('prog-results-area').innerHTML = `
+    <div class="prog-result-grid">
+      <div class="prog-result-item"><div class="pk">nth term (aₙ)</div><div class="pv">${fmt(an,4)}</div></div>
+      <div class="prog-result-item"><div class="pk">Sum (Sₙ)</div><div class="pv">${fmt(sn,4)}</div></div>
+      <div class="prog-result-item"><div class="pk">First term</div><div class="pv">${fmt(a,4)}</div></div>
+      <div class="prog-result-item"><div class="pk">Common diff (d)</div><div class="pv">${fmt(d,4)}</div></div>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-top:0.75rem">
+      First ${Math.min(n,15)} terms: ${terms.join(', ')}${n>15?' ...':''}
+    </div>
+  `;
+  drawProgressionChart('ap', Array.from({length:Math.min(n,20)},(_,i)=>a+i*d));
+}
+
+function calcGP() {
+  hideError('gp-error');
+  const a=parseFloat(document.getElementById('gp-a').value);
+  const r=parseFloat(document.getElementById('gp-r').value);
+  const n=parseInt(document.getElementById('gp-n').value);
+  if(isNaN(a)||isNaN(r)||isNaN(n)||n<1) { showError('gp-error','Enter valid values.'); return; }
+  if(r===0) { showError('gp-error','Common ratio r cannot be 0.'); return; }
+  const an=a*Math.pow(r,n-1);
+  const sn=Math.abs(r-1)<1e-12?a*n:a*(Math.pow(r,n)-1)/(r-1);
+  const sinf=Math.abs(r)<1?`${fmt(a/(1-r),4)} (|r|<1, convergent)`: 'Diverges (|r|≥1)';
+  const terms=Array.from({length:Math.min(n,12)},(_,i)=>fmt(a*Math.pow(r,i),3));
+  document.getElementById('prog-results-area').innerHTML = `
+    <div class="prog-result-grid">
+      <div class="prog-result-item"><div class="pk">nth term (aₙ)</div><div class="pv">${fmt(an,4)}</div></div>
+      <div class="prog-result-item"><div class="pk">Sum (Sₙ)</div><div class="pv">${fmt(sn,4)}</div></div>
+      <div class="prog-result-item"><div class="pk">Sum to ∞ (S∞)</div><div class="pv" style="font-size:0.8rem">${sinf}</div></div>
+      <div class="prog-result-item"><div class="pk">Common ratio (r)</div><div class="pv">${fmt(r,4)}</div></div>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-top:0.75rem">
+      First ${Math.min(n,12)} terms: ${terms.join(', ')}${n>12?' ...':''}
+    </div>
+  `;
+  drawProgressionChart('gp', Array.from({length:Math.min(n,20)},(_,i)=>a*Math.pow(r,i)));
+}
+
+function identifySeq() {
+  hideError('seq-error');
+  const data=document.getElementById('seq-data').value.split(',').map(s=>parseFloat(s.trim())).filter(v=>!isNaN(v));
+  if(data.length<3) { showError('seq-error','Enter at least 3 numbers.'); return; }
+  const diffs=data.slice(1).map((v,i)=>v-data[i]);
+  const ratios=data.slice(1).map((v,i)=>data[i]!==0?v/data[i]:NaN);
+  const isAP=diffs.every(d=>Math.abs(d-diffs[0])<1e-9);
+  const isGP=ratios.every(r=>isFinite(r)&&Math.abs(r-ratios[0])<1e-9);
+  let result='';
+  if(isAP) result=`<div class="alert alert-info">✓ Arithmetic Progression (AP)<br>Common difference d = ${fmt(diffs[0],4)}</div>`;
+  else if(isGP) result=`<div class="alert alert-info">✓ Geometric Progression (GP)<br>Common ratio r = ${fmt(ratios[0],4)}</div>`;
+  else result=`<div class="alert-danger alert">✗ Neither AP nor GP<br>Differences: ${diffs.map(d=>fmt(d,3)).join(', ')}<br>Ratios: ${ratios.map(r=>isFinite(r)?fmt(r,3):'∞').join(', ')}</div>`;
+  document.getElementById('prog-results-area').innerHTML = result + `
+    <div style="font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-top:0.75rem">
+      Sequence: ${data.join(', ')}
+    </div>`;
+}
+
+function drawProgressionChart(type, data) {
+  const canvas=document.getElementById('prog-canvas');
+  if(!canvas) return;
+  canvas.width=canvas.offsetWidth||500;
+  const W=canvas.width, H=canvas.height=220;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  if(!data.length) return;
+  const pad=35;
+  const validData=data.filter(isFinite);
+  if(!validData.length) return;
+  const maxV=Math.max(...validData), minV=Math.min(...validData,0);
+  const yR=maxV-minV||1;
+  const n=data.length;
+  const toX=i=>pad+i*(W-2*pad)/(n-1||1);
+  const toY=v=>H-pad-(v-minV)/yR*(H-2*pad);
+  // Grid
+  ctx.strokeStyle='rgba(0,210,200,0.07)'; ctx.lineWidth=1;
+  [0,0.25,0.5,0.75,1].forEach(t=>{const y=pad+t*(H-2*pad);ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();});
+  // Baseline
+  ctx.strokeStyle='rgba(0,210,200,0.3)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(pad,toY(0)); ctx.lineTo(W-pad,toY(0)); ctx.stroke();
+  // Line
+  const color=type==='ap'?'#00d2c8':'#fbbf24';
+  ctx.strokeStyle=color; ctx.lineWidth=2;
+  ctx.beginPath();
+  data.forEach((v,i)=>{ if(!isFinite(v)) return; i===0?ctx.moveTo(toX(i),toY(v)):ctx.lineTo(toX(i),toY(v)); });
+  ctx.stroke();
+  // Dots
+  ctx.fillStyle=color;
+  data.forEach((v,i)=>{ if(!isFinite(v)) return; ctx.beginPath(); ctx.arc(toX(i),toY(v),4,0,Math.PI*2); ctx.fill(); });
+  // Labels
+  ctx.fillStyle='rgba(0,210,200,0.6)'; ctx.font='9px JetBrains Mono,monospace'; ctx.textAlign='center';
+  data.forEach((v,i)=>{ if(!isFinite(v)) return; ctx.fillText(i+1,toX(i),H-pad+12); });
+  ctx.textAlign='left'; ctx.fillText(type==='ap'?'AP Sequence':'GP Sequence',pad,pad-6);
+}
+
+</script>
+</body>
+</html>
